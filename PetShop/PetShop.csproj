@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="9.0.9" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Mensagens\MensagemAlerta.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MensagemAlerta.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Mensagens\MensagemErro.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MensagemErro.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Mensagens\MensagemTitulo.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MensagemTitulo.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Mensagens\MensagemAlerta.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MensagemAlerta.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Mensagens\MensagemErro.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MensagemErro.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Mensagens\MensagemTitulo.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MensagemTitulo.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>
