@@ -5,13 +5,13 @@
         private System.ComponentModel.IContainer components = null;
         private Panel panelCentral;
         private Label NomeAnimalLabel;
-        private TextBox NomeTextBox;
-        private Label TipoLabel;
-        private TextBox TipoTextBox;
+        private TextBox NomeAnimalTextBox;
+        private Label NomeTutorLabel;
+        private TextBox NomeTutorTextBox;
         private Label RacaLabel;
         private TextBox RacaTextBox;
         private Label SexoLabel;
-        private ComboBox SexoTextBox;
+        private ComboBox SexoComboBox;
         private Label DataNascimentoLabel;
         private DateTimePicker DataNascimentoDateTimerPicker;
         private Label ObservacaoLabel;
@@ -30,15 +30,16 @@
             components = new System.ComponentModel.Container();
             errorProvider = new ErrorProvider(components);
             panelCentral = new Panel();
+            CancelarButton = new Button();
             SalvarButton = new Button();
             NomeAnimalLabel = new Label();
-            NomeTextBox = new TextBox();
-            TipoLabel = new Label();
-            TipoTextBox = new TextBox();
+            NomeAnimalTextBox = new TextBox();
+            NomeTutorLabel = new Label();
+            NomeTutorTextBox = new TextBox();
             RacaLabel = new Label();
             RacaTextBox = new TextBox();
             SexoLabel = new Label();
-            SexoTextBox = new ComboBox();
+            SexoComboBox = new ComboBox();
             DataNascimentoLabel = new Label();
             DataNascimentoDateTimerPicker = new DateTimePicker();
             ObservacaoLabel = new Label();
@@ -54,23 +55,34 @@
             // panelCentral
             // 
             panelCentral.BackColor = Color.WhiteSmoke;
+            panelCentral.Controls.Add(CancelarButton);
             panelCentral.Controls.Add(SalvarButton);
             panelCentral.Controls.Add(NomeAnimalLabel);
-            panelCentral.Controls.Add(NomeTextBox);
-            panelCentral.Controls.Add(TipoLabel);
-            panelCentral.Controls.Add(TipoTextBox);
+            panelCentral.Controls.Add(NomeAnimalTextBox);
+            panelCentral.Controls.Add(NomeTutorLabel);
+            panelCentral.Controls.Add(NomeTutorTextBox);
             panelCentral.Controls.Add(RacaLabel);
             panelCentral.Controls.Add(RacaTextBox);
             panelCentral.Controls.Add(SexoLabel);
-            panelCentral.Controls.Add(SexoTextBox);
+            panelCentral.Controls.Add(SexoComboBox);
             panelCentral.Controls.Add(DataNascimentoLabel);
             panelCentral.Controls.Add(DataNascimentoDateTimerPicker);
             panelCentral.Controls.Add(ObservacaoLabel);
             panelCentral.Controls.Add(ObservacoesTextBox);
             panelCentral.Location = new Point(0, 0);
             panelCentral.Name = "panelCentral";
-            panelCentral.Size = new Size(381, 529);
+            panelCentral.Size = new Size(402, 529);
             panelCentral.TabIndex = 0;
+            // 
+            // CancelarButton
+            // 
+            CancelarButton.Location = new Point(218, 440);
+            CancelarButton.Name = "CancelarButton";
+            CancelarButton.Size = new Size(150, 34);
+            CancelarButton.TabIndex = 13;
+            CancelarButton.Text = "Cancelar";
+            CancelarButton.UseVisualStyleBackColor = true;
+            CancelarButton.Click += CancelarButton_Click;
             // 
             // SalvarButton
             // 
@@ -91,28 +103,28 @@
             NomeAnimalLabel.TabIndex = 0;
             NomeAnimalLabel.Text = "Nome do Animal";
             // 
-            // NomeTextBox
+            // NomeAnimalTextBox
             // 
-            NomeTextBox.Location = new Point(25, 45);
-            NomeTextBox.Name = "NomeTextBox";
-            NomeTextBox.Size = new Size(291, 23);
-            NomeTextBox.TabIndex = 1;
+            NomeAnimalTextBox.Location = new Point(25, 45);
+            NomeAnimalTextBox.Name = "NomeAnimalTextBox";
+            NomeAnimalTextBox.Size = new Size(343, 23);
+            NomeAnimalTextBox.TabIndex = 1;
             // 
-            // TipoLabel
+            // NomeTutorLabel
             // 
-            TipoLabel.AutoSize = true;
-            TipoLabel.Location = new Point(25, 80);
-            TipoLabel.Name = "TipoLabel";
-            TipoLabel.Size = new Size(89, 15);
-            TipoLabel.TabIndex = 2;
-            TipoLabel.Text = "Tipo do Animal";
+            NomeTutorLabel.AutoSize = true;
+            NomeTutorLabel.Location = new Point(25, 80);
+            NomeTutorLabel.Name = "NomeTutorLabel";
+            NomeTutorLabel.Size = new Size(125, 15);
+            NomeTutorLabel.TabIndex = 2;
+            NomeTutorLabel.Text = "Nome tutor do animal";
             // 
-            // TipoTextBox
+            // NomeTutorTextBox
             // 
-            TipoTextBox.Location = new Point(25, 105);
-            TipoTextBox.Name = "TipoTextBox";
-            TipoTextBox.Size = new Size(291, 23);
-            TipoTextBox.TabIndex = 3;
+            NomeTutorTextBox.Location = new Point(25, 105);
+            NomeTutorTextBox.Name = "NomeTutorTextBox";
+            NomeTutorTextBox.Size = new Size(343, 23);
+            NomeTutorTextBox.TabIndex = 3;
             // 
             // RacaLabel
             // 
@@ -127,7 +139,7 @@
             // 
             RacaTextBox.Location = new Point(25, 165);
             RacaTextBox.Name = "RacaTextBox";
-            RacaTextBox.Size = new Size(291, 23);
+            RacaTextBox.Size = new Size(343, 23);
             RacaTextBox.TabIndex = 5;
             // 
             // SexoLabel
@@ -139,13 +151,14 @@
             SexoLabel.TabIndex = 6;
             SexoLabel.Text = "Sexo do Animal";
             // 
-            // SexoTextBox
+            // SexoComboBox
             // 
-            SexoTextBox.Items.AddRange(new object[] { "Macho", "Fêmea" });
-            SexoTextBox.Location = new Point(25, 225);
-            SexoTextBox.Name = "SexoTextBox";
-            SexoTextBox.Size = new Size(291, 23);
-            SexoTextBox.TabIndex = 7;
+            SexoComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            SexoComboBox.Items.AddRange(new object[] { "Macho", "Fêmea" });
+            SexoComboBox.Location = new Point(25, 225);
+            SexoComboBox.Name = "SexoComboBox";
+            SexoComboBox.Size = new Size(343, 23);
+            SexoComboBox.TabIndex = 7;
             // 
             // DataNascimentoLabel
             // 
@@ -160,7 +173,7 @@
             // 
             DataNascimentoDateTimerPicker.Location = new Point(25, 285);
             DataNascimentoDateTimerPicker.Name = "DataNascimentoDateTimerPicker";
-            DataNascimentoDateTimerPicker.Size = new Size(291, 23);
+            DataNascimentoDateTimerPicker.Size = new Size(343, 23);
             DataNascimentoDateTimerPicker.TabIndex = 9;
             // 
             // ObservacaoLabel
@@ -178,14 +191,14 @@
             ObservacoesTextBox.Multiline = true;
             ObservacoesTextBox.Name = "ObservacoesTextBox";
             ObservacoesTextBox.ScrollBars = ScrollBars.Vertical;
-            ObservacoesTextBox.Size = new Size(291, 80);
+            ObservacoesTextBox.Size = new Size(343, 80);
             ObservacoesTextBox.TabIndex = 11;
             // 
             // CadastrarAnimalForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 600);
+            ClientSize = new Size(398, 508);
             Controls.Add(panelCentral);
             Name = "CadastrarAnimalForm";
             StartPosition = FormStartPosition.CenterScreen;
@@ -200,5 +213,6 @@
         }
 
         private Button SalvarButton;
+        private Button CancelarButton;
     }
 }

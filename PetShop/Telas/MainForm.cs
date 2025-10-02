@@ -17,6 +17,7 @@ namespace PetShop.Telas
         {
             InitializeComponent();
             AnimalRepository.Initialize();
+            BanhoTosaRepository.Initialize();
         }
 
         private void BtnCadastrarAnimal_Click(object sender, EventArgs e)

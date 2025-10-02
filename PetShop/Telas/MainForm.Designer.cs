@@ -26,7 +26,7 @@ namespace PetShop.Telas
             menuLateral = new MenuForm();
             menuLateral.CadastrarAnimalClicked += (s, e) => AbrirFormularioNoPanel(new CadastrarAnimalForm(Guid.Empty));
             menuLateral.AgendarConsultaClicked += (s, e) => AbrirFormularioNoPanel(new AgendarConsultaForm());
-            menuLateral.AgendarBanhoClicked += (s, e) => AbrirFormularioNoPanel(new AgendarBanhoTosaForm());
+            menuLateral.AgendarBanhoClicked += (s, e) => AbrirFormularioNoPanel(new AgendarBanhoTosaForm(Guid.Empty));
             menuLateral.VisualizarConsultasAgendadasClicked += (s, e) => AbrirFormularioNoPanel(new VisualizarConsultasAgendadas());
             menuLateral.VisualizarBanhoETosasAgendadasClicked += (s, e) => AbrirFormularioNoPanel(new VisualizarBanhoETosasAgendadas());
             menuLateral.VisualizarAnimaisCadastradosClicked += (s, e) => AbrirFormularioNoPanel(new VisualizarAnimaisCadastrados());

@@ -14,11 +14,24 @@ namespace PetShop.Telas
         private BindingSource animalBindingSource = new BindingSource();
         public Guid AnimalId;
         public Animal AnimalAtual = new Animal();
-        public CadastrarAnimalForm(Guid animalId)
+        public bool IsPopUp = false;
+        public CadastrarAnimalForm(Guid animalId, bool isPopUp = false)
         {
             InitializeComponent();
             AnimalId = animalId;
             ConfigurarBinding();
+            IsPopUp = isPopUp;
+            CancelarButton.Visible = isPopUp;
+            if (isPopUp)
+            {
+                this.Text = "Editar Animal";
+                this.WindowState = FormWindowState.Normal;
+                this.StartPosition = FormStartPosition.CenterParent;
+                this.FormBorderStyle = FormBorderStyle.FixedDialog;
+                this.MaximizeBox = false;
+                this.MinimizeBox = false;
+                this.ShowInTaskbar = false;
+            }
         }
 
         private void ConfigurarBinding()
@@ -36,10 +49,22 @@ namespace PetShop.Telas
             animalBindingSource.DataSource = AnimalAtual;
 
             // Associa cada controle ao BindingSource
-            NomeTextBox.DataBindings.Add("Text", animalBindingSource, nameof(Animal.Nome), false, DataSourceUpdateMode.OnPropertyChanged);
-            TipoTextBox.DataBindings.Add("Text", animalBindingSource, nameof(Animal.Tipo), false, DataSourceUpdateMode.OnPropertyChanged);
+            NomeAnimalTextBox.DataBindings.Add("Text", animalBindingSource, nameof(Animal.NomeAnimal), false, DataSourceUpdateMode.OnPropertyChanged);
+            NomeTutorTextBox.DataBindings.Add("Text", animalBindingSource, nameof(Animal.NomeTutor), false, DataSourceUpdateMode.OnPropertyChanged);
             RacaTextBox.DataBindings.Add("Text", animalBindingSource, nameof(Animal.Raca), false, DataSourceUpdateMode.OnPropertyChanged);
-            SexoTextBox.DataBindings.Add("Text", animalBindingSource, nameof(Animal.Sexo), false, DataSourceUpdateMode.OnPropertyChanged);
+
+            var binding = new Binding("SelectedItem", animalBindingSource, nameof(Animal.Sexo), true, DataSourceUpdateMode.OnPropertyChanged);
+            binding.Format += (s, e) =>
+            {
+                if (e.Value == null || !SexoComboBox.Items.Contains(e.Value))
+                    e.Value = null;
+            };
+            binding.Parse += (s, e) =>
+            {
+                e.Value ??= "";
+            };
+            SexoComboBox.DataBindings.Add(binding);
+
             DataNascimentoDateTimerPicker.DataBindings.Add("Value", animalBindingSource, "DataNascimento", true, DataSourceUpdateMode.OnPropertyChanged);
             ObservacoesTextBox.DataBindings.Add("Text", animalBindingSource, nameof(Animal.Observacoes), false, DataSourceUpdateMode.OnPropertyChanged);
         }
@@ -62,14 +87,14 @@ namespace PetShop.Telas
 
         public bool ValidarCamposPreenchidos()
         {
-            if (string.IsNullOrEmpty(AnimalAtual.Nome))
+            if (string.IsNullOrEmpty(AnimalAtual.NomeAnimal))
             {
-                errorProvider.SetError(NomeTextBox, MensagemAlerta.NomeAnimalNaoPreenchido);
+                errorProvider.SetError(NomeAnimalTextBox, MensagemAlerta.NomeAnimalNaoPreenchido);
                 return false;
             }
-            if (string.IsNullOrEmpty(AnimalAtual.Tipo))
+            if (string.IsNullOrEmpty(AnimalAtual.NomeTutor))
             {
-                errorProvider.SetError(TipoTextBox, MensagemAlerta.TipoAnimalNaoPreenchido);
+                errorProvider.SetError(NomeTutorTextBox, MensagemAlerta.TipoAnimalNaoPreenchido);
                 return false;
             }
             if (string.IsNullOrEmpty(AnimalAtual.Raca))
@@ -79,12 +104,12 @@ namespace PetShop.Telas
             }
             if (string.IsNullOrEmpty(AnimalAtual.Sexo))
             {
-                errorProvider.SetError(SexoTextBox, MensagemAlerta.SexoAnimalNaoPreenchido);
+                errorProvider.SetError(SexoComboBox, MensagemAlerta.SexoAnimalNaoPreenchido);
                 return false;
             }
             if (AnimalAtual.DataNascimento == DateTime.MinValue)
             {
-                errorProvider.SetError(DataNascimentoDateTimerPicker, MensagemAlerta.DataNascimentoNaoPreenchida);
+                errorProvider.SetError(DataNascimentoDateTimerPicker, MensagemAlerta.DataAgendamentoNaoPreenchida);
                 return false;
             }
             return true;
@@ -126,11 +151,21 @@ namespace PetShop.Telas
                 }
 
                 // Aqui você pode salvar no banco, enviar para a API, etc.
-                MessageBox.Show($"Animal '{AnimalAtual.Nome}' salvo com sucesso!");
-
-                // Se quiser limpar os campos para novo cadastro:
-                animalBindingSource.DataSource = new Animal();
+                MessageBox.Show($"Animal '{AnimalAtual.NomeAnimal}' salvo com sucesso!");
+                if (IsPopUp)
+                {
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                }
+                else
+                    animalBindingSource.DataSource = new Animal();
             }
+        }
+
+        private void CancelarButton_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
         }
     }
 }

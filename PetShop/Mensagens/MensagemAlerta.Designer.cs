@@ -61,6 +61,15 @@ namespace PetShop.Mensagens {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Data hora do agendamento não foi preenchida.
+        /// </summary>
+        internal static string DataAgendamentoNaoPreenchida {
+            get {
+                return ResourceManager.GetString("DataAgendamentoNaoPreenchida", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a A data de nascimento inserida é a mesma da atual, está correto?.
         /// </summary>
         internal static string DataNascimentoIgualAtual {
@@ -88,11 +97,38 @@ namespace PetShop.Mensagens {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Modalidade do agendamento não foi preenchida.
+        /// </summary>
+        internal static string ModalidadeAgendamentoNaoPreenchida {
+            get {
+                return ResourceManager.GetString("ModalidadeAgendamentoNaoPreenchida", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Nome do animal a ser agendado não foi preenchido.
+        /// </summary>
+        internal static string NomeAnimalAgendadoNaoPreenchido {
+            get {
+                return ResourceManager.GetString("NomeAnimalAgendadoNaoPreenchido", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Nome do animal não preenchido.
         /// </summary>
         internal static string NomeAnimalNaoPreenchido {
             get {
                 return ResourceManager.GetString("NomeAnimalNaoPreenchido", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Nome do tutor do animal não preenchido.
+        /// </summary>
+        internal static string NomeTutorAnimalNaoPreenchido {
+            get {
+                return ResourceManager.GetString("NomeTutorAnimalNaoPreenchido", resourceCulture);
             }
         }
         
