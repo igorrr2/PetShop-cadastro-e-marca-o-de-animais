@@ -68,6 +68,7 @@ namespace PetShop.Telas
             panelFiltros.Controls.Add(txtFiltroNomeAnimal);
             panelFiltros.Controls.Add(txtFiltroNomeTutor);
             panelFiltros.Controls.Add(txtFiltroRaca);
+            panelFiltros.BackColor = Color.FromArgb(13, 196, 202);
 
             // 
             // txtFiltroNomeAnimal
@@ -110,6 +111,7 @@ namespace PetShop.Telas
             dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView.MultiSelect = false;
             dataGridView.DataSource = animalBindingSource;
+            dataGridView.BackgroundColor = Color.FromArgb(13, 196, 202);
 
             // Colunas do DataGridView
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn

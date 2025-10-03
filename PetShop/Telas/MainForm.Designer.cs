@@ -18,8 +18,8 @@ namespace PetShop.Telas
             panelConteudo = new Panel
             {
                 Dock = DockStyle.Fill,
-                BackColor = Color.WhiteSmoke
-            };
+                BackColor = Color.FromArgb(149, 94, 38)
+        };
             this.Controls.Add(panelConteudo);
 
             // Menu lateral
@@ -55,6 +55,7 @@ namespace PetShop.Telas
             formFilho.TopLevel = false;
             formFilho.FormBorderStyle = FormBorderStyle.None;
             formFilho.Dock = DockStyle.Fill;
+            formFilho.BackColor = Color.FromArgb(149, 94, 38);
             panelConteudo.Controls.Add(formFilho);
             panelConteudo.Tag = formFilho;
             formFilho.Show();

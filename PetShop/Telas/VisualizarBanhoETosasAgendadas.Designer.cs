@@ -57,7 +57,7 @@ namespace PetShop.Telas
             dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView.Size = new Size(1000, 480);
             dataGridView.TabIndex = 0;
-
+            dataGridView.BackgroundColor = Color.FromArgb(13, 196, 202);
             dataGridView.DataSource = BanhoTosaBindingSource;
 
             // Colunas do DataGridView
@@ -151,6 +151,7 @@ namespace PetShop.Telas
             panelFiltros.Padding = new Padding(5);
             panelFiltros.Size = new Size(1000, 40);
             panelFiltros.TabIndex = 1;
+            panelFiltros.BackColor = Color.FromArgb(13, 196, 202);
             // 
             // txtFiltroNomeAnimal
             // 
