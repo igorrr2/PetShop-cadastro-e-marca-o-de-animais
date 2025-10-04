@@ -4,6 +4,9 @@
     <Compile Update="LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Telas\AgendamentosDoDiaForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Telas\AgendarBanhoTosaForm.cs">
       <SubType>Form</SubType>
     </Compile>

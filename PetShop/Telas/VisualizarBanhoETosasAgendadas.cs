@@ -15,15 +15,82 @@ namespace PetShop.Telas
     public partial class VisualizarBanhoETosasAgendadas : Form
     {
         private List<BanhoTosa> BanhoTosasOriginais;
-        public VisualizarBanhoETosasAgendadas()
+        private bool Historico = false;
+        public VisualizarBanhoETosasAgendadas(bool historico = false)
         {
             InitializeComponent();
+            Historico = historico;
+            ConfigurarColunasDataGridView();
             CarregarDados();
+            if (historico)
+            {
+                this.Text = "Histórico de agendamentos realizados";
+            }
+            HistoricoAgendamentosButton.Visible = NovoAgendamentoButton.Visible = !Historico;
+        }
+
+        public void ConfigurarColunasDataGridView()
+        {
+            // Colunas do DataGridView
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = nameof(BanhoTosa.NomeAnimalAgendado),
+                HeaderText = "Nome do Animal Agendado",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+            });
+
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = nameof(BanhoTosa.NomeTutorAnimal),
+                HeaderText = "Nome do Tutor do animal agendado",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+            });
+
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = nameof(BanhoTosa.ModalidadeAgendamento),
+                HeaderText = "Modalidade agendamento",
+                Width = 150
+            });
+
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = nameof(BanhoTosa.DataAgendamento),
+                HeaderText = "Data do agendamento",
+                Width = 150,
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy HH:mm" }
+            });
+
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = nameof(BanhoTosa.Observacoes),
+                HeaderText = "Observações",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+            });
+            // Coluna Editar
+            var colEditar = new DataGridViewButtonColumn
+            {
+                HeaderText = "Editar",
+                Text = "✏️ Editar",
+                UseColumnTextForButtonValue = true,
+                Width = 80
+            };
+            dataGridView.Columns.Add(colEditar);
+
+            // Coluna Excluir
+            var colExcluir = new DataGridViewButtonColumn
+            {
+                HeaderText = "Excluir",
+                Text = "🗑️ Excluir",
+                UseColumnTextForButtonValue = true,
+                Width = 80
+            };
+            dataGridView.Columns.Add(colExcluir);
         }
 
         private void CarregarDados()
         {
-            BanhoTosasOriginais = BanhoTosaRepository.ListAll();
+            BanhoTosaRepository.ListAll(out BanhoTosasOriginais, Historico);
             BanhoTosaBindingSource.DataSource = BanhoTosasOriginais.ToList();
         }
 
@@ -83,6 +150,32 @@ namespace PetShop.Telas
                         else
                             CarregarDados();
                     }
+                }
+            }
+        }
+
+        private void NovoAgendamentoButton_Click(object sender, EventArgs e)
+        {
+            using (var form = new AgendarBanhoTosaForm(Guid.Empty, true))
+            {
+                DialogResult result = form.ShowDialog(this);
+                if (result == DialogResult.OK || result == DialogResult.Cancel)
+                {
+                    CarregarDados();
+                }
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            using (var form = new VisualizarBanhoETosasAgendadas(true))
+            {
+                form.StartPosition = FormStartPosition.CenterScreen; // centraliza na tela
+                DialogResult result = form.ShowDialog(this);
+
+                if (result == DialogResult.OK || result == DialogResult.Cancel)
+                {
+                    CarregarDados();
                 }
             }
         }

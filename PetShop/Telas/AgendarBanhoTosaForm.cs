@@ -1,5 +1,5 @@
 ﻿using PetShop.Data;
-using PetShop.MensagemRetorno;
+using Util.MensagemRetorno;
 using PetShop.Mensagens;
 using PetShop.Models;
 using System;
@@ -116,15 +116,15 @@ namespace PetShop.Telas
         }
 
         public bool ValidarCamposPreenchidos()
-        {
-            if (string.IsNullOrEmpty(BanhoTosaAtual.NomeTutorAnimal))
-            {
-                errorProvider.SetError(NomeTutorTextBox, MensagemAlerta.NomeTutorAnimalNaoPreenchido);
-                return false;
-            }
+        {   
             if (string.IsNullOrEmpty(BanhoTosaAtual.NomeAnimalAgendado))
             {
                 errorProvider.SetError(NomeAnimalAgendadoCombobox, MensagemAlerta.NomeAnimalAgendadoNaoPreenchido);
+                return false;
+            }
+            if (string.IsNullOrEmpty(BanhoTosaAtual.NomeTutorAnimal))
+            {
+                errorProvider.SetError(NomeTutorTextBox, MensagemAlerta.NomeTutorAnimalNaoPreenchido);
                 return false;
             }
             if (string.IsNullOrEmpty(BanhoTosaAtual.ModalidadeAgendamento))
@@ -134,7 +134,7 @@ namespace PetShop.Telas
             }
             if (BanhoTosaAtual.DataAgendamento == DateTime.MinValue)
             {
-                errorProvider.SetError(DataAgendamentoDateTimerPicker, MensagemAlerta.DataNascimentoNaoPreenchida);
+                errorProvider.SetError(DataAgendamentoDateTimerPicker, MensagemAlerta.DataAgendamentoNaoPreenchida);
                 return false;
             }
 
@@ -172,11 +172,13 @@ namespace PetShop.Telas
                 else
                 {
                     BanhoTosaAtual = new BanhoTosa();
-                    BanhoTosaBindingSource.DataSource = BanhoTosaAtual;
+                    //BanhoTosaBindingSource.DataSource = BanhoTosaAtual;
 
                     NomeTutorTextBox.DataBindings.Clear();
                     NomeAnimalAgendadoCombobox.DataBindings.Clear();
+                    NomeAnimalAgendadoCombobox.SelectedValue = string.Empty;
                     ModalidadeAgendamentoComBox.DataBindings.Clear();
+                    ModalidadeAgendamentoComBox.SelectedIndex = -1;
                     DataAgendamentoDateTimerPicker.DataBindings.Clear();
                     ObservacoesTextBox.DataBindings.Clear();
 

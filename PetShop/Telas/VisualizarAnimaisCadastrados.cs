@@ -14,7 +14,82 @@ namespace PetShop.Telas
         public VisualizarAnimaisCadastrados()
         {
             InitializeComponent();
+            ConfigurarColunasDataGridView();
             CarregarDados();
+        }
+
+        public void ConfigurarColunasDataGridView()
+        {
+            // Colunas do DataGridView
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = nameof(Animal.NomeAnimal),
+                HeaderText = "Nome do Animal",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+            });
+
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = nameof(Animal.NomeTutor),
+                HeaderText = "Nome do Tutor",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+            });
+
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = nameof(Animal.Raca),
+                HeaderText = "Raça",
+                Width = 150
+            });
+
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = nameof(Animal.Sexo),
+                HeaderText = "Sexo",
+                Width = 80
+            });
+
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = nameof(Animal.DataNascimento),
+                HeaderText = "Data de Nascimento",
+                Width = 150,
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy" }
+            });
+
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = nameof(Animal.Observacoes),
+                HeaderText = "Observações",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+            });
+
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = nameof(Animal.NumeroTelefoneTutor),
+                HeaderText = "Número de telefone do Tutor",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+            });
+
+            // Coluna Editar
+            var colEditar = new DataGridViewButtonColumn
+            {
+                HeaderText = "Editar",
+                Text = "✏️ Editar",
+                UseColumnTextForButtonValue = true,
+                Width = 80
+            };
+            dataGridView.Columns.Add(colEditar);
+
+            // Coluna Excluir
+            var colExcluir = new DataGridViewButtonColumn
+            {
+                HeaderText = "Excluir",
+                Text = "🗑️ Excluir",
+                UseColumnTextForButtonValue = true,
+                Width = 80
+            };
+            dataGridView.Columns.Add(colExcluir);
         }
 
         private void CarregarDados()
@@ -77,6 +152,18 @@ namespace PetShop.Telas
                         else
                             CarregarDados();
                     }
+                }
+            }
+        }
+
+        private void NovoAnimalButton_Click(object sender, EventArgs e)
+        {
+            using (var form = new CadastrarAnimalForm(Guid.Empty, true))
+            {
+                DialogResult result = form.ShowDialog(this);
+                if (result == DialogResult.OK || result == DialogResult.Cancel)
+                {
+                    CarregarDados();
                 }
             }
         }

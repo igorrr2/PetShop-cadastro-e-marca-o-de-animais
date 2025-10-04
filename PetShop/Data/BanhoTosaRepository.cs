@@ -1,8 +1,8 @@
-﻿using System;
+﻿using PetShop.Models;
+using System;
 using System.Collections.Generic;
 using Microsoft.Data.Sqlite;
-using PetShop.Models;
-using PetShop.MensagemRetorno;
+using Util.MensagemRetorno;
 
 namespace PetShop.Data
 {
@@ -21,18 +21,19 @@ namespace PetShop.Data
             conexao.Open();
 
             string sql = @"
-            CREATE TABLE IF NOT EXISTS BanhoTosaAgendamentos (
-                Id TEXT PRIMARY KEY,
-                NomeAnimalAgendado TEXT NOT NULL,
-                NomeTutorAnimal TEXT NOT NULL,
-                ModalidadeAgendamento TEXT NOT NULL,
-                DataAgendamento TEXT NOT NULL,
-                Observacoes TEXT
-            );";
+                CREATE TABLE IF NOT EXISTS BanhoTosaAgendamentos (
+                    Id TEXT PRIMARY KEY,
+                    NomeAnimalAgendado TEXT NOT NULL,
+                    NomeTutorAnimal TEXT NOT NULL,
+                    ModalidadeAgendamento TEXT NOT NULL,
+                    DataAgendamento DATETIME NOT NULL,
+                    Observacoes TEXT
+                );";
 
             using var cmd = new SqliteCommand(sql, conexao);
             cmd.ExecuteNonQuery();
         }
+
         public static Mensagem TryGet(Guid id, out BanhoTosa banhoTosa)
         {
             banhoTosa = null;
@@ -48,15 +49,7 @@ namespace PetShop.Data
                 using var reader = cmd.ExecuteReader();
                 if (reader.Read())
                 {
-                    banhoTosa = new BanhoTosa
-                    {
-                        Id = Guid.Parse(reader["Id"].ToString()),
-                        DataAgendamento = DateTime.Parse(reader["DataAgendamento"].ToString()),
-                        ModalidadeAgendamento = reader["ModalidadeAgendamento"].ToString(),
-                        NomeAnimalAgendado = reader["NomeAnimalAgendado"].ToString(),
-                        NomeTutorAnimal = reader["NomeTutorAnimal"].ToString(),
-                        Observacoes = reader["Observacoes"].ToString()
-                    };
+                    banhoTosa = LerBanhoTosa(reader);
                     return new Mensagem();
                 }
             }
@@ -64,15 +57,14 @@ namespace PetShop.Data
             {
                 return new Mensagem(ex.Message, ex);
             }
-            if (banhoTosa == null)
-                return new Mensagem("Agendamento não encontrado no banco de dados");
 
-            return new Mensagem();
+            return new Mensagem("Agendamento não encontrado no banco de dados");
         }
 
         public static Mensagem TrySave(BanhoTosa banhoTosa)
         {
-            if (banhoTosa == null) return new Mensagem("Não há Agendamentos para salvar.");
+            if (banhoTosa == null)
+                return new Mensagem("Não há Agendamentos para salvar.");
 
             try
             {
@@ -83,7 +75,8 @@ namespace PetShop.Data
                 if (banhoTosa.Id == Guid.Empty) // Novo registro
                 {
                     banhoTosa.Id = Guid.NewGuid();
-                    sql = @"INSERT INTO BanhoTosaAgendamentos (Id, DataAgendamento, ModalidadeAgendamento, NomeAnimalAgendado, NomeTutorAnimal, Observacoes) 
+                    sql = @"INSERT INTO BanhoTosaAgendamentos 
+                            (Id, DataAgendamento, ModalidadeAgendamento, NomeAnimalAgendado, NomeTutorAnimal, Observacoes) 
                             VALUES (@Id, @DataAgendamento, @ModalidadeAgendamento, @NomeAnimalAgendado, @NomeTutorAnimal, @Observacoes)";
                 }
                 else // Atualizar registro existente
@@ -99,7 +92,7 @@ namespace PetShop.Data
 
                 using var cmd = new SqliteCommand(sql, conexao);
                 cmd.Parameters.AddWithValue("@Id", banhoTosa.Id.ToString());
-                cmd.Parameters.AddWithValue("@DataAgendamento", banhoTosa.DataAgendamento.ToString("yyyy-MM-dd HH:mm"));
+                cmd.Parameters.AddWithValue("@DataAgendamento", banhoTosa.DataAgendamento.ToString("yyyy-MM-dd HH:mm:ss"));
                 cmd.Parameters.AddWithValue("@ModalidadeAgendamento", banhoTosa.ModalidadeAgendamento);
                 cmd.Parameters.AddWithValue("@NomeAnimalAgendado", banhoTosa.NomeAnimalAgendado);
                 cmd.Parameters.AddWithValue("@NomeTutorAnimal", banhoTosa.NomeTutorAnimal);
@@ -114,7 +107,6 @@ namespace PetShop.Data
             }
         }
 
-        // Método para deletar
         public static Mensagem TryDelete(Guid id)
         {
             try
@@ -135,38 +127,83 @@ namespace PetShop.Data
             }
         }
 
-        // Método para listar todos os animais
-        public static List<BanhoTosa> ListAll()
+        public static Mensagem ListAll(out List<BanhoTosa> banhoTosaList, bool Historico = false)
         {
-            var lista = new List<BanhoTosa>();
+            banhoTosaList = new List<BanhoTosa>();
             try
             {
                 using var conexao = new SqliteConnection(_caminhoBanco);
                 conexao.Open();
-
-                string sql = "SELECT * FROM BanhoTosaAgendamentos";
+                string sql;
+                if (Historico)
+                {
+                    sql = @"
+                    SELECT * FROM BanhoTosaAgendamentos
+                    WHERE DATE(DataAgendamento) < DATE('now', 'localtime')
+                    ORDER BY DataAgendamento ASC";
+                }
+                else
+                {
+                    sql = @"
+                    SELECT * FROM BanhoTosaAgendamentos
+                    WHERE DATE(DataAgendamento) >= DATE('now', 'localtime')
+                    ORDER BY DataAgendamento ASC";
+                }
                 using var cmd = new SqliteCommand(sql, conexao);
                 using var reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    lista.Add(new BanhoTosa
-                    {
-                        Id = Guid.Parse(reader["Id"].ToString()),
-                        DataAgendamento = DateTime.Parse(reader["DataAgendamento"].ToString()),
-                        ModalidadeAgendamento = reader["ModalidadeAgendamento"].ToString(),
-                        NomeAnimalAgendado = reader["NomeAnimalAgendado"].ToString(),
-                        NomeTutorAnimal = reader["NomeTutorAnimal"].ToString(),
-                        Observacoes = reader["Observacoes"].ToString()
-                    });
+                    banhoTosaList.Add(LerBanhoTosa(reader));
                 }
+                return new Mensagem();
             }
-            catch
+            catch (Exception ex)
             {
-                // log de erro opcional
+                return new Mensagem(ex.Message, ex);
             }
+        }
 
-            return lista;
+        public static Mensagem TryGetByAgendamentosDoDia(out List<BanhoTosa> banhoTosaList)
+        {
+            banhoTosaList = new List<BanhoTosa>();
+            try
+            {
+                using var conexao = new SqliteConnection(_caminhoBanco);
+                conexao.Open();
+
+                string sql = @"
+                    SELECT * FROM BanhoTosaAgendamentos
+                    WHERE DATE(DataAgendamento) = DATE('now', 'localtime')
+                    ORDER BY DataAgendamento ASC";
+
+                using var cmd = new SqliteCommand(sql, conexao);
+                using var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    banhoTosaList.Add(LerBanhoTosa(reader));
+                }
+                return new Mensagem();
+            }
+            catch (Exception ex)
+            {
+                return new Mensagem(ex.Message, ex);
+            }
+        }
+
+        // Método auxiliar para ler os dados
+        private static BanhoTosa LerBanhoTosa(SqliteDataReader reader)
+        {
+            return new BanhoTosa
+            {
+                Id = Guid.Parse(reader["Id"].ToString()),
+                DataAgendamento = DateTime.Parse(reader["DataAgendamento"].ToString()),
+                ModalidadeAgendamento = reader["ModalidadeAgendamento"].ToString(),
+                NomeAnimalAgendado = reader["NomeAnimalAgendado"].ToString(),
+                NomeTutorAnimal = reader["NomeTutorAnimal"].ToString(),
+                Observacoes = reader["Observacoes"].ToString()
+            };
         }
     }
 }

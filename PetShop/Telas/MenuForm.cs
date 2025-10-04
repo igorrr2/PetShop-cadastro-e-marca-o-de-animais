@@ -24,7 +24,6 @@ namespace PetShop.Telas
         {
             this.Dock = DockStyle.Left;
             this.Width = 200;
-            this.BackColor = Color.LightGray;
 
             // Botões topo
             Button btnCadastrarAnimal = new Button { Text = "Cadastrar Animal", Dock = DockStyle.Top, Height = 50 };

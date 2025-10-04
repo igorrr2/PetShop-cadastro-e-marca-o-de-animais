@@ -8,7 +8,7 @@ namespace PetShop.Telas
 {
     partial class VisualizarAnimaisCadastrados
     {
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         private BindingSource animalBindingSource;
         private DataGridView dataGridView;
@@ -31,7 +31,8 @@ namespace PetShop.Telas
         #region Windows Form Designer generated code
         private void InitializeComponent()
         {
-            animalBindingSource = new BindingSource();
+            components = new Container();
+            animalBindingSource = new BindingSource(components);
             dataGridView = new DataGridView();
             panelTitulo = new Panel();
             AnimaisCadastradosLabel = new Label();
@@ -39,146 +40,102 @@ namespace PetShop.Telas
             txtFiltroNomeAnimal = new TextBox();
             txtFiltroNomeTutor = new TextBox();
             txtFiltroRaca = new TextBox();
-
+            NovoAnimalButton = new Button();
+            ((ISupportInitialize)animalBindingSource).BeginInit();
+            ((ISupportInitialize)dataGridView).BeginInit();
+            panelTitulo.SuspendLayout();
+            panelFiltros.SuspendLayout();
             SuspendLayout();
-
+            // 
+            // dataGridView
+            // 
+            dataGridView.AllowUserToAddRows = false;
+            dataGridView.AllowUserToDeleteRows = false;
+            dataGridView.AutoGenerateColumns = false;
+            dataGridView.BackgroundColor = Color.FromArgb(149, 94, 38);
+            dataGridView.DataSource = animalBindingSource;
+            dataGridView.Dock = DockStyle.Fill;
+            dataGridView.Location = new Point(0, 120);
+            dataGridView.MultiSelect = false;
+            dataGridView.Name = "dataGridView";
+            dataGridView.ReadOnly = true;
+            dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView.Size = new Size(1000, 480);
+            dataGridView.TabIndex = 0;
+            dataGridView.CellClick += DataGridView_CellClick;
             // 
             // panelTitulo
             // 
-            panelTitulo.Dock = DockStyle.Top;
-            panelTitulo.Height = 80;
             panelTitulo.BackColor = Color.WhiteSmoke;
             panelTitulo.Controls.Add(AnimaisCadastradosLabel);
-
+            panelTitulo.Dock = DockStyle.Top;
+            panelTitulo.Location = new Point(0, 0);
+            panelTitulo.Name = "panelTitulo";
+            panelTitulo.Size = new Size(1000, 80);
+            panelTitulo.TabIndex = 2;
             // 
             // AnimaisCadastradosLabel
             // 
             AnimaisCadastradosLabel.Dock = DockStyle.Fill;
-            AnimaisCadastradosLabel.TextAlign = ContentAlignment.MiddleCenter;
             AnimaisCadastradosLabel.Font = new Font("Segoe UI", 22F, FontStyle.Bold, GraphicsUnit.Point);
+            AnimaisCadastradosLabel.Location = new Point(0, 0);
+            AnimaisCadastradosLabel.Name = "AnimaisCadastradosLabel";
+            AnimaisCadastradosLabel.Size = new Size(1000, 80);
+            AnimaisCadastradosLabel.TabIndex = 0;
             AnimaisCadastradosLabel.Text = "Animais Cadastrados";
-
+            AnimaisCadastradosLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // panelFiltros
             // 
-            panelFiltros.Dock = DockStyle.Top;
-            panelFiltros.Height = 40; // aumento da altura
-            panelFiltros.BackColor = Color.LightGray;
-            panelFiltros.Padding = new Padding(5, 5, 5, 5); // espaçamento interno em cima e embaixo
+            panelFiltros.BackColor = Color.FromArgb(149, 94, 38);
+            panelFiltros.Controls.Add(NovoAnimalButton);
             panelFiltros.Controls.Add(txtFiltroNomeAnimal);
             panelFiltros.Controls.Add(txtFiltroNomeTutor);
             panelFiltros.Controls.Add(txtFiltroRaca);
-            panelFiltros.BackColor = Color.FromArgb(13, 196, 202);
-
+            panelFiltros.Dock = DockStyle.Top;
+            panelFiltros.Location = new Point(0, 80);
+            panelFiltros.Name = "panelFiltros";
+            panelFiltros.Padding = new Padding(5);
+            panelFiltros.Size = new Size(1000, 40);
+            panelFiltros.TabIndex = 1;
             // 
             // txtFiltroNomeAnimal
             // 
+            txtFiltroNomeAnimal.Location = new Point(5, 5);
+            txtFiltroNomeAnimal.Name = "txtFiltroNomeAnimal";
             txtFiltroNomeAnimal.PlaceholderText = "Filtrar por Nome do Animal";
-            txtFiltroNomeAnimal.Width = 200;
-            txtFiltroNomeAnimal.Height = 25; // aumento da altura
-            txtFiltroNomeAnimal.Top = 5; // distancia do topo do painel
-            txtFiltroNomeAnimal.Left = 5; 
+            txtFiltroNomeAnimal.Size = new Size(200, 23);
+            txtFiltroNomeAnimal.TabIndex = 0;
             txtFiltroNomeAnimal.TextChanged += Filtro_TextChanged;
-
             // 
             // txtFiltroNomeTutor
             // 
+            txtFiltroNomeTutor.Location = new Point(205, 5);
+            txtFiltroNomeTutor.Name = "txtFiltroNomeTutor";
             txtFiltroNomeTutor.PlaceholderText = "Filtrar por Nome do Tutor";
-            txtFiltroNomeTutor.Width = 200;
-            txtFiltroNomeTutor.Height = 25;
-            txtFiltroNomeTutor.Top = 5;
-            txtFiltroNomeTutor.Left = txtFiltroNomeAnimal.Right + 10; // distância entre campos
+            txtFiltroNomeTutor.Size = new Size(200, 23);
+            txtFiltroNomeTutor.TabIndex = 1;
             txtFiltroNomeTutor.TextChanged += Filtro_TextChanged;
-
             // 
             // txtFiltroRaca
             // 
+            txtFiltroRaca.Location = new Point(405, 5);
+            txtFiltroRaca.Name = "txtFiltroRaca";
             txtFiltroRaca.PlaceholderText = "Filtrar por Raça";
-            txtFiltroRaca.Width = 150;
-            txtFiltroRaca.Height = 25;
-            txtFiltroRaca.Top = 5;
-            txtFiltroRaca.Left = txtFiltroNomeTutor.Right + 10;
+            txtFiltroRaca.Size = new Size(150, 23);
+            txtFiltroRaca.TabIndex = 2;
             txtFiltroRaca.TextChanged += Filtro_TextChanged;
-
             // 
-            // dataGridView
+            // NovoAnimalButton
             // 
-            dataGridView.Dock = DockStyle.Fill;
-            dataGridView.AutoGenerateColumns = false;
-            dataGridView.AllowUserToAddRows = false;
-            dataGridView.AllowUserToDeleteRows = false;
-            dataGridView.ReadOnly = true;
-            dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView.MultiSelect = false;
-            dataGridView.DataSource = animalBindingSource;
-            dataGridView.BackgroundColor = Color.FromArgb(13, 196, 202);
-
-            // Colunas do DataGridView
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = nameof(Animal.NomeAnimal),
-                HeaderText = "Nome do Animal",
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
-            });
-
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = nameof(Animal.NomeTutor),
-                HeaderText = "Nome do Tutor",
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
-            });
-
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = nameof(Animal.Raca),
-                HeaderText = "Raça",
-                Width = 150
-            });
-
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = nameof(Animal.Sexo),
-                HeaderText = "Sexo",
-                Width = 80
-            });
-
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = nameof(Animal.DataNascimento),
-                HeaderText = "Data de Nascimento",
-                Width = 150,
-                DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy" }
-            });
-
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = nameof(Animal.Observacoes),
-                HeaderText = "Observações",
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
-            });
-
-            // Coluna Editar
-            var colEditar = new DataGridViewButtonColumn
-            {
-                HeaderText = "Editar",
-                Text = "✏️ Editar",
-                UseColumnTextForButtonValue = true,
-                Width = 80
-            };
-            dataGridView.Columns.Add(colEditar);
-
-            // Coluna Excluir
-            var colExcluir = new DataGridViewButtonColumn
-            {
-                HeaderText = "Excluir",
-                Text = "🗑️ Excluir",
-                UseColumnTextForButtonValue = true,
-                Width = 80
-            };
-            dataGridView.Columns.Add(colExcluir);
-
-            dataGridView.CellClick += DataGridView_CellClick;
-
+            NovoAnimalButton.Dock = DockStyle.Right;
+            NovoAnimalButton.Location = new Point(882, 5);
+            NovoAnimalButton.Name = "NovoAnimalButton";
+            NovoAnimalButton.Size = new Size(113, 30);
+            NovoAnimalButton.TabIndex = 3;
+            NovoAnimalButton.Text = "Novo animal";
+            NovoAnimalButton.UseVisualStyleBackColor = true;
+            NovoAnimalButton.Click += NovoAnimalButton_Click;
             // 
             // VisualizarAnimaisCadastrados
             // 
@@ -188,9 +145,17 @@ namespace PetShop.Telas
             Controls.Add(dataGridView);
             Controls.Add(panelFiltros);
             Controls.Add(panelTitulo);
+            Name = "VisualizarAnimaisCadastrados";
             Text = "Animais Cadastrados";
+            ((ISupportInitialize)animalBindingSource).EndInit();
+            ((ISupportInitialize)dataGridView).EndInit();
+            panelTitulo.ResumeLayout(false);
+            panelFiltros.ResumeLayout(false);
+            panelFiltros.PerformLayout();
             ResumeLayout(false);
         }
         #endregion
+
+        private Button NovoAnimalButton;
     }
 }

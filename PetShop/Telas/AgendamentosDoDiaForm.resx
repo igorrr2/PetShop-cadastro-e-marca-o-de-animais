@@ -117,43 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DataAgendamentoNaoPreenchida" xml:space="preserve">
-    <value>Data hora do agendamento não foi preenchida</value>
-  </data>
-  <data name="DataNascimentoIgualAtual" xml:space="preserve">
-    <value>A data de nascimento inserida é a mesma da atual, está correto?</value>
-  </data>
-  <data name="DataNascimentoNaoPreenchida" xml:space="preserve">
-    <value>Data de nascimento não preenchida</value>
-  </data>
-  <data name="LoginNaoPreenchido" xml:space="preserve">
-    <value>Campo de login é obrigatório</value>
-  </data>
-  <data name="ModalidadeAgendamentoNaoPreenchida" xml:space="preserve">
-    <value>Modalidade do agendamento não foi preenchida</value>
-  </data>
-  <data name="NomeAnimalAgendadoNaoPreenchido" xml:space="preserve">
-    <value>Nome do animal a ser agendado não foi preenchido</value>
-  </data>
-  <data name="NomeAnimalNaoPreenchido" xml:space="preserve">
-    <value>Nome do animal não preenchido</value>
-  </data>
-  <data name="NomeTutorAnimalNaoPreenchido" xml:space="preserve">
-    <value>Nome do tutor do animal não preenchido</value>
-  </data>
-  <data name="NumeroTutorNaoPreenchido" xml:space="preserve">
-    <value>Número de telefone do tutor não preenchido</value>
-  </data>
-  <data name="RacaAnimalNaoPreenchida" xml:space="preserve">
-    <value>Raça do animal não preenchida</value>
-  </data>
-  <data name="SenhaNaoPreenchida" xml:space="preserve">
-    <value>Campo de senha é obrigatório</value>
-  </data>
-  <data name="SexoAnimalNaoPreenchido" xml:space="preserve">
-    <value>Sexo do animal não preenchido</value>
-  </data>
-  <data name="TipoAnimalNaoPreenchido" xml:space="preserve">
-    <value>Tipo do animal não preenchido</value>
-  </data>
 </root>

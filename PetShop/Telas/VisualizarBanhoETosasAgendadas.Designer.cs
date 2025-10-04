@@ -34,6 +34,8 @@ namespace PetShop.Telas
             panelTitulo = new Panel();
             AgendamentosCadastradosLabel = new Label();
             panelFiltros = new Panel();
+            HistoricoAgendamentosButton = new Button();
+            NovoAgendamentoButton = new Button();
             txtFiltroNomeAnimal = new TextBox();
             txtFiltroNomeTutor = new TextBox();
             txtFiltroModalidade = new TextBox();
@@ -49,72 +51,16 @@ namespace PetShop.Telas
             dataGridView.AllowUserToAddRows = false;
             dataGridView.AllowUserToDeleteRows = false;
             dataGridView.AutoGenerateColumns = false;
+            dataGridView.BackgroundColor = Color.FromArgb(149, 94, 38);
+            dataGridView.DataSource = BanhoTosaBindingSource;
             dataGridView.Dock = DockStyle.Fill;
             dataGridView.Location = new Point(0, 120);
             dataGridView.MultiSelect = false;
             dataGridView.Name = "dataGridView";
             dataGridView.ReadOnly = true;
             dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView.Size = new Size(1000, 480);
+            dataGridView.Size = new Size(1096, 480);
             dataGridView.TabIndex = 0;
-            dataGridView.BackgroundColor = Color.FromArgb(13, 196, 202);
-            dataGridView.DataSource = BanhoTosaBindingSource;
-
-            // Colunas do DataGridView
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = nameof(BanhoTosa.NomeAnimalAgendado),
-                HeaderText = "Nome do Animal Agendado",
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
-            });
-
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = nameof(BanhoTosa.NomeTutorAnimal),
-                HeaderText = "Nome do Tutor do animal agendado",
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
-            });
-
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = nameof(BanhoTosa.ModalidadeAgendamento),
-                HeaderText = "Modalidade agendamento",
-                Width = 150
-            });
-
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = nameof(BanhoTosa.DataAgendamento),
-                HeaderText = "Data do agendamento",
-                Width = 150,
-                DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy HH:mm" }
-            });
-
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = nameof(BanhoTosa.Observacoes),
-                HeaderText = "Observações",
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
-            });
-            // Coluna Editar
-            var colEditar = new DataGridViewButtonColumn
-            {
-                HeaderText = "Editar",
-                Text = "✏️ Editar",
-                UseColumnTextForButtonValue = true,
-                Width = 80
-            };
-            dataGridView.Columns.Add(colEditar);
-
-            // Coluna Excluir
-            var colExcluir = new DataGridViewButtonColumn
-            {
-                HeaderText = "Excluir",
-                Text = "🗑️ Excluir",
-                UseColumnTextForButtonValue = true,
-                Width = 80
-            };
-            dataGridView.Columns.Add(colExcluir);
             dataGridView.CellClick += DataGridView_CellClick;
             // 
             // panelTitulo
@@ -124,7 +70,7 @@ namespace PetShop.Telas
             panelTitulo.Dock = DockStyle.Top;
             panelTitulo.Location = new Point(0, 0);
             panelTitulo.Name = "panelTitulo";
-            panelTitulo.Size = new Size(1000, 80);
+            panelTitulo.Size = new Size(1096, 80);
             panelTitulo.TabIndex = 2;
             // 
             // AgendamentosCadastradosLabel
@@ -133,14 +79,16 @@ namespace PetShop.Telas
             AgendamentosCadastradosLabel.Font = new Font("Segoe UI", 22F, FontStyle.Bold, GraphicsUnit.Point);
             AgendamentosCadastradosLabel.Location = new Point(0, 0);
             AgendamentosCadastradosLabel.Name = "AgendamentosCadastradosLabel";
-            AgendamentosCadastradosLabel.Size = new Size(1000, 80);
+            AgendamentosCadastradosLabel.Size = new Size(1096, 80);
             AgendamentosCadastradosLabel.TabIndex = 0;
             AgendamentosCadastradosLabel.Text = "Agendamentos Cadastrados";
             AgendamentosCadastradosLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // panelFiltros
             // 
-            panelFiltros.BackColor = Color.LightGray;
+            panelFiltros.BackColor = Color.FromArgb(149, 94, 38);
+            panelFiltros.Controls.Add(HistoricoAgendamentosButton);
+            panelFiltros.Controls.Add(NovoAgendamentoButton);
             panelFiltros.Controls.Add(txtFiltroNomeAnimal);
             panelFiltros.Controls.Add(txtFiltroNomeTutor);
             panelFiltros.Controls.Add(txtFiltroModalidade);
@@ -149,9 +97,30 @@ namespace PetShop.Telas
             panelFiltros.Location = new Point(0, 80);
             panelFiltros.Name = "panelFiltros";
             panelFiltros.Padding = new Padding(5);
-            panelFiltros.Size = new Size(1000, 40);
+            panelFiltros.Size = new Size(1096, 40);
             panelFiltros.TabIndex = 1;
-            panelFiltros.BackColor = Color.FromArgb(13, 196, 202);
+            // 
+            // HistoricoAgendamentosButton
+            // 
+            HistoricoAgendamentosButton.Dock = DockStyle.Right;
+            HistoricoAgendamentosButton.Location = new Point(786, 5);
+            HistoricoAgendamentosButton.Name = "HistoricoAgendamentosButton";
+            HistoricoAgendamentosButton.Size = new Size(175, 30);
+            HistoricoAgendamentosButton.TabIndex = 4;
+            HistoricoAgendamentosButton.Text = "Histórico de agendamentos";
+            HistoricoAgendamentosButton.UseVisualStyleBackColor = true;
+            HistoricoAgendamentosButton.Click += button1_Click;
+            // 
+            // NovoAgendamentoButton
+            // 
+            NovoAgendamentoButton.Dock = DockStyle.Right;
+            NovoAgendamentoButton.Location = new Point(961, 5);
+            NovoAgendamentoButton.Name = "NovoAgendamentoButton";
+            NovoAgendamentoButton.Size = new Size(130, 30);
+            NovoAgendamentoButton.TabIndex = 3;
+            NovoAgendamentoButton.Text = "Novo agendamento";
+            NovoAgendamentoButton.UseVisualStyleBackColor = true;
+            NovoAgendamentoButton.Click += NovoAgendamentoButton_Click;
             // 
             // txtFiltroNomeAnimal
             // 
@@ -193,7 +162,7 @@ namespace PetShop.Telas
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1000, 600);
+            ClientSize = new Size(1096, 600);
             Controls.Add(dataGridView);
             Controls.Add(panelFiltros);
             Controls.Add(panelTitulo);
@@ -210,5 +179,7 @@ namespace PetShop.Telas
 
         private DataGridViewButtonColumn colEditar;
         private DataGridViewButtonColumn colExcluir;
+        private Button NovoAgendamentoButton;
+        private Button HistoricoAgendamentosButton;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using PetShop.Data;
+using PetShop.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,21 +19,18 @@ namespace PetShop.Telas
             InitializeComponent();
             AnimalRepository.Initialize();
             BanhoTosaRepository.Initialize();
-        }
 
-        private void BtnCadastrarAnimal_Click(object sender, EventArgs e)
-        {
-            //AbrirFormularioNoPanel(new CadastrarAnimalForm());
-        }
+            BanhoTosaRepository.TryGetByAgendamentosDoDia(out List<BanhoTosa> listaBanhoTosa);
 
-        private void BtnAgendarConsulta_Click(object sender, EventArgs e)
-        {
-            //AbrirFormularioNoPanel(new AgendarConsultaForm());
-        }
+            if (listaBanhoTosa.Count > 0)
+            {
+                var popup = new AgendamentosDoDiaForm(listaBanhoTosa);
 
-        private void BtnAgendarBanho_Click(object sender, EventArgs e)
-        {
-            //AbrirFormularioNoPanel(new AgendarBanhoForm());
+                popup.Owner = this;
+                popup.TopMost = true;
+                popup.StartPosition = FormStartPosition.CenterScreen;
+                popup.Show(); 
+            }
         }
     }
 }

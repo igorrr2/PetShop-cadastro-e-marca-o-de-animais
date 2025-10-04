@@ -17,10 +17,11 @@ namespace PetShop.Models
         public string Sexo { get; set; }
         public DateTime DataNascimento { get; set; }
         public string Observacoes { get; set; }
+        public string NumeroTelefoneTutor { get; set; }
 
         public Animal()
         {
-            NomeAnimal = string.Empty; NomeTutor = string.Empty; Raca = string.Empty; Sexo = string.Empty; Observacoes = string.Empty;
+            NomeAnimal = string.Empty; NomeTutor = string.Empty; Raca = string.Empty; Sexo = string.Empty; Observacoes = NumeroTelefoneTutor = string.Empty;
             Id = Guid.Empty;
             DataNascimento = DateTime.Now;
         }

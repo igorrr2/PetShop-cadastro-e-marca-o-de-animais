@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Data.Sqlite;
 using PetShop.Models;
-using PetShop.MensagemRetorno;
+using Util.MensagemRetorno;
 
 namespace PetShop.Data
 {
@@ -28,7 +28,8 @@ namespace PetShop.Data
                 Raca TEXT NOT NULL,
                 Sexo TEXT NOT NULL,
                 DataNascimento TEXT NOT NULL,
-                Observacoes TEXT
+                Observacoes TEXT,
+                NumeroTelefoneTutor TEXT
             );";
 
             using var cmd = new SqliteCommand(sql, conexao);
@@ -59,7 +60,8 @@ namespace PetShop.Data
                         Raca = reader["Raca"].ToString(),
                         Sexo = reader["Sexo"].ToString(),
                         DataNascimento = DateTime.Parse(reader["DataNascimento"].ToString()),
-                        Observacoes = reader["Observacoes"].ToString()
+                        Observacoes = reader["Observacoes"].ToString(),
+                        NumeroTelefoneTutor = reader["NumeroTelefoneTutor"].ToString()
                     };
                     return new Mensagem();
                 }
@@ -88,8 +90,8 @@ namespace PetShop.Data
                 if (animal.Id == Guid.Empty) // Novo registro
                 {
                     animal.Id = Guid.NewGuid();
-                    sql = @"INSERT INTO Animal (Id, NomeAnimal, NomeTutor, Raca, Sexo, DataNascimento, Observacoes) 
-                            VALUES (@Id, @NomeAnimal, @NomeTutor, @Raca, @Sexo, @DataNascimento, @Observacoes)";
+                    sql = @"INSERT INTO Animal (Id, NomeAnimal, NomeTutor, Raca, Sexo, DataNascimento, Observacoes, NumeroTelefoneTutor) 
+                            VALUES (@Id, @NomeAnimal, @NomeTutor, @Raca, @Sexo, @DataNascimento, @Observacoes, @NumeroTelefoneTutor)";
                 }
                 else // Atualizar registro existente
                 {
@@ -99,7 +101,8 @@ namespace PetShop.Data
                             Raca = @Raca,
                             Sexo = @Sexo,
                             DataNascimento = @DataNascimento,
-                            Observacoes = @Observacoes
+                            Observacoes = @Observacoes,
+                            NumeroTelefoneTutor = @NumeroTelefoneTutor
                             WHERE Id = @Id";
                 }
 
@@ -111,6 +114,7 @@ namespace PetShop.Data
                 cmd.Parameters.AddWithValue("@Sexo", animal.Sexo);
                 cmd.Parameters.AddWithValue("@DataNascimento", animal.DataNascimento.ToString("yyyy-MM-dd"));
                 cmd.Parameters.AddWithValue("@Observacoes", animal.Observacoes);
+                cmd.Parameters.AddWithValue("@NumeroTelefoneTutor", animal.NumeroTelefoneTutor);
 
                 cmd.ExecuteNonQuery();
                 return new Mensagem();
@@ -165,7 +169,8 @@ namespace PetShop.Data
                         Raca = reader["Raca"].ToString(),
                         Sexo = reader["Sexo"].ToString(),
                         DataNascimento = DateTime.Parse(reader["DataNascimento"].ToString()),
-                        Observacoes = reader["Observacoes"].ToString()
+                        Observacoes = reader["Observacoes"].ToString(),
+                        NumeroTelefoneTutor = reader["NumeroTelefoneTutor"].ToString()
                     });
                 }
             }

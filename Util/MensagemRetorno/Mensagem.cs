@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetShop.MensagemRetorno
+namespace Util.MensagemRetorno
 {
     public class Mensagem
     {
         public bool Sucesso = true;
         public string Descricao = string.Empty;
         public Exception Excecao;
-        public Mensagem() { 
-            
+        public Mensagem()
+        {
+
         }
         public Mensagem(string mensagem)
         {
@@ -26,4 +27,5 @@ namespace PetShop.MensagemRetorno
             Excecao = ex;
         }
     }
+
 }

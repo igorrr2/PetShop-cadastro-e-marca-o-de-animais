@@ -1,11 +1,11 @@
 ﻿using PetShop.Data;
-using PetShop.MensagemRetorno;
 using PetShop.Mensagens;
 using PetShop.Models;
 using System;
 using System.Drawing;
 using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
+using Util.MensagemRetorno;
 
 namespace PetShop.Telas
 {
@@ -52,6 +52,7 @@ namespace PetShop.Telas
             NomeAnimalTextBox.DataBindings.Add("Text", animalBindingSource, nameof(Animal.NomeAnimal), false, DataSourceUpdateMode.OnPropertyChanged);
             NomeTutorTextBox.DataBindings.Add("Text", animalBindingSource, nameof(Animal.NomeTutor), false, DataSourceUpdateMode.OnPropertyChanged);
             RacaTextBox.DataBindings.Add("Text", animalBindingSource, nameof(Animal.Raca), false, DataSourceUpdateMode.OnPropertyChanged);
+            NumeroTelefoneTutorTextBox.DataBindings.Add("Text", animalBindingSource, nameof(Animal.NumeroTelefoneTutor), false, DataSourceUpdateMode.OnPropertyChanged);
 
             var binding = new Binding("SelectedItem", animalBindingSource, nameof(Animal.Sexo), true, DataSourceUpdateMode.OnPropertyChanged);
             binding.Format += (s, e) =>
@@ -95,6 +96,11 @@ namespace PetShop.Telas
             if (string.IsNullOrEmpty(AnimalAtual.NomeTutor))
             {
                 errorProvider.SetError(NomeTutorTextBox, MensagemAlerta.TipoAnimalNaoPreenchido);
+                return false;
+            }
+            if (string.IsNullOrEmpty(AnimalAtual.NumeroTelefoneTutor))
+            {
+                errorProvider.SetError(NomeTutorTextBox, MensagemAlerta.NumeroTutorNaoPreenchido);
                 return false;
             }
             if (string.IsNullOrEmpty(AnimalAtual.Raca))
@@ -158,7 +164,10 @@ namespace PetShop.Telas
                     this.Close();
                 }
                 else
+                {
+                    SexoComboBox.SelectedIndex = -1;
                     animalBindingSource.DataSource = new Animal();
+                }
             }
         }
 

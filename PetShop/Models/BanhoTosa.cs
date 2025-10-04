@@ -9,6 +9,7 @@ namespace PetShop.Models
     public class BanhoTosa
     {
         public Guid Id { get; set; }
+
         public DateTime DataAgendamento { get; set; }
         
         public string NomeAnimalAgendado { get; set; }

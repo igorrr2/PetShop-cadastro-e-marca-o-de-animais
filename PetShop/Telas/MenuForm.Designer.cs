@@ -12,7 +12,7 @@ namespace PetShop.Telas
             // 
             // MenuForm
             // 
-            BackColor = Color.LightGray;
+            BackColor = Color.FromArgb(13, 196, 202);
             Name = "MenuForm";
             Size = new Size(200, 614);
             ResumeLayout(false);

@@ -133,6 +133,15 @@ namespace PetShop.Mensagens {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Número de telefone do tutor não preenchido.
+        /// </summary>
+        internal static string NumeroTutorNaoPreenchido {
+            get {
+                return ResourceManager.GetString("NumeroTutorNaoPreenchido", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Raça do animal não preenchida.
         /// </summary>
         internal static string RacaAnimalNaoPreenchida {
