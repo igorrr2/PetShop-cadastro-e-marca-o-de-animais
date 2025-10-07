@@ -1,0 +1,12 @@
+C:\Igor\ProjetoPetShop\AplicacaoWindows\Util\bin\Release\net6.0\Util.deps.json
+C:\Igor\ProjetoPetShop\AplicacaoWindows\Util\bin\Release\net6.0\Util.dll
+C:\Igor\ProjetoPetShop\AplicacaoWindows\Util\bin\Release\net6.0\Util.pdb
+C:\Igor\ProjetoPetShop\AplicacaoWindows\Util\obj\Release\net6.0\Util.csproj.AssemblyReference.cache
+C:\Igor\ProjetoPetShop\AplicacaoWindows\Util\obj\Release\net6.0\Util.GeneratedMSBuildEditorConfig.editorconfig
+C:\Igor\ProjetoPetShop\AplicacaoWindows\Util\obj\Release\net6.0\Util.AssemblyInfoInputs.cache
+C:\Igor\ProjetoPetShop\AplicacaoWindows\Util\obj\Release\net6.0\Util.AssemblyInfo.cs
+C:\Igor\ProjetoPetShop\AplicacaoWindows\Util\obj\Release\net6.0\Util.csproj.CoreCompileInputs.cache
+C:\Igor\ProjetoPetShop\AplicacaoWindows\Util\obj\Release\net6.0\Util.dll
+C:\Igor\ProjetoPetShop\AplicacaoWindows\Util\obj\Release\net6.0\refint\Util.dll
+C:\Igor\ProjetoPetShop\AplicacaoWindows\Util\obj\Release\net6.0\Util.pdb
+C:\Igor\ProjetoPetShop\AplicacaoWindows\Util\obj\Release\net6.0\ref\Util.dll

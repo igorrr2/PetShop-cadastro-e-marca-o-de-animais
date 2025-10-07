@@ -1,9 +1,11 @@
 ﻿using PetShop.Data;
+using PetShop.Mensagens;
 using PetShop.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Util.MensagemRetorno;
 
 namespace PetShop.Telas
 {
@@ -94,7 +96,12 @@ namespace PetShop.Telas
 
         private void CarregarDados()
         {
-            animaisOriginais = AnimalRepository.ListAll();
+            Mensagem mensagem = AnimalRepository.ListAll(out animaisOriginais);
+            if (!mensagem.Sucesso)
+            {
+                MessageBox.Show(string.Format(MensagemErro.ErroAoObterRegistroNoBanco, mensagem.Descricao), MensagemTitulo.ErroAoSalvar, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             animalBindingSource.DataSource = animaisOriginais.ToList();
         }
 

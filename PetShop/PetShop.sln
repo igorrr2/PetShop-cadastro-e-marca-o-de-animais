@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetShop", "PetShop.csproj",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util", "..\Util\Util.csproj", "{138724FA-5C19-48FF-B305-FD9B19FEE2DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConverterGuidShortGuid", "..\ConverterGuidShortGuid\ConverterGuidShortGuid.csproj", "{CC6972B9-D46A-4C8D-8E9C-17559F35A7C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{138724FA-5C19-48FF-B305-FD9B19FEE2DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{138724FA-5C19-48FF-B305-FD9B19FEE2DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{138724FA-5C19-48FF-B305-FD9B19FEE2DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC6972B9-D46A-4C8D-8E9C-17559F35A7C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC6972B9-D46A-4C8D-8E9C-17559F35A7C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC6972B9-D46A-4C8D-8E9C-17559F35A7C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC6972B9-D46A-4C8D-8E9C-17559F35A7C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

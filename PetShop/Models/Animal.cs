@@ -11,6 +11,8 @@ namespace PetShop.Models
     public class Animal
     {
         public Guid Id { get; set; }
+
+        public string IdAnimalBancoServidor { get; set; }
         public string NomeAnimal { get; set; }
         public string NomeTutor { get; set; }
         public string Raca { get; set; }
@@ -21,7 +23,7 @@ namespace PetShop.Models
 
         public Animal()
         {
-            NomeAnimal = string.Empty; NomeTutor = string.Empty; Raca = string.Empty; Sexo = string.Empty; Observacoes = NumeroTelefoneTutor = string.Empty;
+            NomeAnimal = IdAnimalBancoServidor = string.Empty; NomeTutor = string.Empty; Raca = string.Empty; Sexo = string.Empty; Observacoes = NumeroTelefoneTutor = string.Empty;
             Id = Guid.Empty;
             DataNascimento = DateTime.Now;
         }

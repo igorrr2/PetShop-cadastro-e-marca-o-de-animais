@@ -61,6 +61,15 @@ namespace PetShop.Mensagens {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Data de agendamento não pode ser menor ou igual a data atual.
+        /// </summary>
+        internal static string DataAgendamentoMenorQueAtual {
+            get {
+                return ResourceManager.GetString("DataAgendamentoMenorQueAtual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Data hora do agendamento não foi preenchida.
         /// </summary>
         internal static string DataAgendamentoNaoPreenchida {

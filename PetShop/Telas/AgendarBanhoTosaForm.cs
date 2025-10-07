@@ -25,7 +25,12 @@ namespace PetShop.Telas
         public AgendarBanhoTosaForm(Guid banhoTosaId, bool isPopUp = false)
         {
             InitializeComponent();
-            ListaAnimaisCadastrados = AnimalRepository.ListAll();
+            Mensagem mensagem = AnimalRepository.ListAll(out ListaAnimaisCadastrados);
+            if (!mensagem.Sucesso)
+            {
+                MessageBox.Show(string.Format(MensagemErro.ErroAoObterRegistroNoBanco, mensagem.Descricao), MensagemTitulo.ErroAoSalvar, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             BanhoTosaId = banhoTosaId;
             ConfigurarBinding();
             IsPopUp = isPopUp;
@@ -61,22 +66,30 @@ namespace PetShop.Telas
             NomeAnimalAgendadoCombobox.ValueMember = nameof(Animal.NomeAnimal);   // valor usado para seleção
             NomeAnimalAgendadoCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            // 2️⃣ Faz binding no SelectedValue para atualizar o objeto BanhoTosaAtual
-            NomeAnimalAgendadoCombobox.DataBindings.Add(
-                "SelectedValue",                     // sempre SelectedValue
-                BanhoTosaAtual,                      // objeto que será atualizado
-                nameof(BanhoTosaAtual.NomeAnimalAgendado),
-                true,
-                DataSourceUpdateMode.OnPropertyChanged
-            );
 
-            // 3️⃣ Seleciona o valor atual, se houver
-            if (!string.IsNullOrEmpty(BanhoTosaAtual.NomeAnimalAgendado))
+            mensagem = AnimalRepository.ListAll(out List<Animal> animais);
+            if (!mensagem.Sucesso)
             {
-                NomeAnimalAgendadoCombobox.SelectedValue = BanhoTosaAtual.NomeAnimalAgendado;
+                MessageBox.Show(string.Format(MensagemErro.ErroAoObterRegistroNoBanco, mensagem.Descricao), MensagemTitulo.ErroAoSalvar, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
-            NomeTutorTextBox.DataBindings.Add("Text", BanhoTosaAtual, nameof(BanhoTosa.NomeTutorAnimal), true, DataSourceUpdateMode.OnPropertyChanged);
+            NomeAnimalAgendadoCombobox.DataSource = animais;
+            NomeAnimalAgendadoCombobox.DisplayMember = nameof(Animal.NomeAnimal);
+            NomeAnimalAgendadoCombobox.ValueMember = nameof(Animal.Id);
+
+            NomeAnimalAgendadoCombobox.DataBindings.Add(
+                 "SelectedValue",
+                 BanhoTosaAtual,
+                 nameof(BanhoTosaAtual.AnimalId),
+                 true,
+                 DataSourceUpdateMode.OnPropertyChanged
+             );
+
+            if (BanhoTosaAtual.AnimalId != Guid.Empty)
+            {
+                NomeAnimalAgendadoCombobox.SelectedValue = BanhoTosaAtual.AnimalId;
+            }
 
             var binding = new Binding("SelectedItem", BanhoTosaAtual, nameof(BanhoTosa.ModalidadeAgendamento), true, DataSourceUpdateMode.OnPropertyChanged);
             binding.Format += (s, e) =>
@@ -101,6 +114,7 @@ namespace PetShop.Telas
         private void AgendarBanhoTosaForm_Resize(object sender, EventArgs e)
         {
             CentralizarPanel();
+            LabelErro.MaximumSize = new Size(panelCentral.Width - 50, 0);
         }
 
         private void CentralizarPanel()
@@ -116,31 +130,89 @@ namespace PetShop.Telas
         }
 
         public bool ValidarCamposPreenchidos()
-        {   
-            if (string.IsNullOrEmpty(BanhoTosaAtual.NomeAnimalAgendado))
+        {
+            if (BanhoTosaAtual.AnimalId == Guid.Empty)
             {
+                MostrarErro(MensagemAlerta.NomeAnimalAgendadoNaoPreenchido);
                 errorProvider.SetError(NomeAnimalAgendadoCombobox, MensagemAlerta.NomeAnimalAgendadoNaoPreenchido);
-                return false;
-            }
-            if (string.IsNullOrEmpty(BanhoTosaAtual.NomeTutorAnimal))
-            {
-                errorProvider.SetError(NomeTutorTextBox, MensagemAlerta.NomeTutorAnimalNaoPreenchido);
                 return false;
             }
             if (string.IsNullOrEmpty(BanhoTosaAtual.ModalidadeAgendamento))
             {
+                MostrarErro(MensagemAlerta.ModalidadeAgendamentoNaoPreenchida);
                 errorProvider.SetError(ModalidadeAgendamentoComBox, MensagemAlerta.ModalidadeAgendamentoNaoPreenchida);
                 return false;
             }
             if (BanhoTosaAtual.DataAgendamento == DateTime.MinValue)
             {
+                MostrarErro(MensagemAlerta.DataAgendamentoNaoPreenchida);
                 errorProvider.SetError(DataAgendamentoDateTimerPicker, MensagemAlerta.DataAgendamentoNaoPreenchida);
                 return false;
             }
 
+            if (BanhoTosaAtual.DataAgendamento < DateTime.Now)
+            {
+                MostrarErro(MensagemAlerta.DataAgendamentoMenorQueAtual);
+                return false;
+            }
+
+            LabelErro.Visible = false;
             return true;
         }
 
+        private void AjustarPosicaoECrescimentoForm()
+        {
+            // Reposiciona campos baseado na label de erro
+            int yInicial = LabelErro.Visible ? LabelErro.Bottom + 10 : 18;
+
+            NomeAnimalAgendadoLabel.Top = yInicial;
+            NomeAnimalAgendadoCombobox.Top = NomeAnimalAgendadoLabel.Bottom + 5;
+
+            ModalidadeAgendamentoLabel.Top = NomeAnimalAgendadoCombobox.Bottom + 10;
+            ModalidadeAgendamentoComBox.Top = ModalidadeAgendamentoLabel.Bottom + 5;
+
+            DataAgendamentoLabel.Top = ModalidadeAgendamentoComBox.Bottom + 10;
+            DataAgendamentoDateTimerPicker.Top = DataAgendamentoLabel.Bottom + 5;
+
+            ObservacaoLabel.Top = DataAgendamentoDateTimerPicker.Bottom + 10;
+            ObservacoesTextBox.Top = ObservacaoLabel.Bottom + 5;
+
+            SalvarButton.Top = ObservacoesTextBox.Bottom + 10;
+            CancelarButton.Top = ObservacoesTextBox.Bottom + 10;
+
+            // Soma a altura de todos os controles do panelCentral
+            int alturaTotal = 0;
+            foreach (Control ctrl in panelCentral.Controls)
+            {
+                if (ctrl.Visible)
+                {
+                    int ctrlBottom = ctrl.Bottom;
+                    if (ctrlBottom > alturaTotal)
+                        alturaTotal = ctrlBottom;
+                }
+            }
+
+            int margemExtra = 25; // espaço abaixo do último controle
+            panelCentral.Height = alturaTotal + margemExtra;
+
+            // Define altura do formulário
+            this.Height = panelCentral.Top + panelCentral.Height + margemExtra;
+
+            // Centraliza horizontalmente
+            panelCentral.Left = (this.ClientSize.Width - panelCentral.Width) / 2;
+        }
+
+
+        private void MostrarErro(string mensagem)
+        {
+            LabelErro.Text = mensagem;
+            LabelErro.Visible = true;
+
+            LabelErro.MaximumSize = new Size(panelCentral.Width - 50, 0);
+            LabelErro.AutoSize = true;
+            AjustarPosicaoECrescimentoForm();
+
+        }
 
         private void SalvarButton_Click(object sender, EventArgs e)
         {
@@ -153,6 +225,14 @@ namespace PetShop.Telas
 
             if (BanhoTosaAtual != null)
             {
+                mensagem = AnimalRepository.TryGet(BanhoTosaAtual.AnimalId, out Animal animal);
+                if (!mensagem.Sucesso || animal == null)
+                {
+                    MessageBox.Show(string.Format(MensagemErro.ErroAoObterRegistroNoBanco, mensagem.Descricao), MensagemTitulo.ErroTitulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                BanhoTosaAtual.IdAgendamentoBancoServidor = Guid.NewGuid();
                 mensagem = BanhoTosaRepository.TrySave(BanhoTosaAtual);
                 if (!mensagem.Sucesso)
                 {
@@ -162,7 +242,7 @@ namespace PetShop.Telas
 
                 // Aqui você pode salvar no banco, enviar para a API, etc.
                 MessageBox.Show(
-                $"Animal '{BanhoTosaAtual.NomeAnimalAgendado}' agendado com sucesso para o dia/hora '{BanhoTosaAtual.DataAgendamento:dd/MM/yyyy HH:mm}'!"
+                $"Animal '{animal.NomeAnimal}' agendado com sucesso para o dia/hora '{BanhoTosaAtual.DataAgendamento:dd/MM/yyyy HH:mm}'!"
                 );
                 if (IsPopUp)
                 {
@@ -174,14 +254,15 @@ namespace PetShop.Telas
                     BanhoTosaAtual = new BanhoTosa();
                     //BanhoTosaBindingSource.DataSource = BanhoTosaAtual;
 
-                    NomeTutorTextBox.DataBindings.Clear();
                     NomeAnimalAgendadoCombobox.DataBindings.Clear();
                     NomeAnimalAgendadoCombobox.SelectedValue = string.Empty;
                     ModalidadeAgendamentoComBox.DataBindings.Clear();
                     ModalidadeAgendamentoComBox.SelectedIndex = -1;
                     DataAgendamentoDateTimerPicker.DataBindings.Clear();
                     ObservacoesTextBox.DataBindings.Clear();
-
+                    LabelErro.Visible = false;
+                    LabelErro.Text = string.Empty;
+                    AjustarPosicaoECrescimentoForm();
                     // Reconfigura bindings
                     ConfigurarBinding();
                 }

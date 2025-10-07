@@ -90,31 +90,37 @@ namespace PetShop.Telas
         {
             if (string.IsNullOrEmpty(AnimalAtual.NomeAnimal))
             {
+                MostrarErro(MensagemAlerta.NomeAnimalNaoPreenchido);
                 errorProvider.SetError(NomeAnimalTextBox, MensagemAlerta.NomeAnimalNaoPreenchido);
                 return false;
             }
             if (string.IsNullOrEmpty(AnimalAtual.NomeTutor))
             {
+                MostrarErro(MensagemAlerta.TipoAnimalNaoPreenchido);
                 errorProvider.SetError(NomeTutorTextBox, MensagemAlerta.TipoAnimalNaoPreenchido);
                 return false;
             }
             if (string.IsNullOrEmpty(AnimalAtual.NumeroTelefoneTutor))
             {
+                MostrarErro(MensagemAlerta.NumeroTutorNaoPreenchido);
                 errorProvider.SetError(NomeTutorTextBox, MensagemAlerta.NumeroTutorNaoPreenchido);
                 return false;
             }
             if (string.IsNullOrEmpty(AnimalAtual.Raca))
             {
+                MostrarErro(MensagemAlerta.RacaAnimalNaoPreenchida);
                 errorProvider.SetError(RacaTextBox, MensagemAlerta.RacaAnimalNaoPreenchida);
                 return false;
             }
             if (string.IsNullOrEmpty(AnimalAtual.Sexo))
             {
+                MostrarErro(MensagemAlerta.SexoAnimalNaoPreenchido);
                 errorProvider.SetError(SexoComboBox, MensagemAlerta.SexoAnimalNaoPreenchido);
                 return false;
             }
             if (AnimalAtual.DataNascimento == DateTime.MinValue)
             {
+                MostrarErro(MensagemAlerta.DataAgendamentoNaoPreenchida);
                 errorProvider.SetError(DataNascimentoDateTimerPicker, MensagemAlerta.DataAgendamentoNaoPreenchida);
                 return false;
             }
@@ -167,8 +173,65 @@ namespace PetShop.Telas
                 {
                     SexoComboBox.SelectedIndex = -1;
                     animalBindingSource.DataSource = new Animal();
+                    LabelErro.Visible = false;
+                    LabelErro.Text = string.Empty;
+                    AjustarPosicaoECrescimentoForm();
                 }
             }
+        }
+
+        private void AjustarPosicaoECrescimentoForm()
+        {
+            // Se tiver LabelErro, usa Bottom + margem; senão, usa valor fixo
+            int yInicial = (LabelErro != null && LabelErro.Visible) ? LabelErro.Bottom + 10 : 18;
+
+            // Reposiciona todos os campos
+            NomeAnimalLabel.Top = yInicial;
+            NomeAnimalTextBox.Top = NomeAnimalLabel.Bottom + 5;
+
+            NomeTutorLabel.Top = NomeAnimalTextBox.Bottom + 10;
+            NomeTutorTextBox.Top = NomeTutorLabel.Bottom + 5;
+
+            NumeroTelefoneTutoLabel.Top = NomeTutorTextBox.Bottom + 10;
+            NumeroTelefoneTutorTextBox.Top = NumeroTelefoneTutoLabel.Bottom + 5;
+
+            RacaLabel.Top = NumeroTelefoneTutorTextBox.Bottom + 10;
+            RacaTextBox.Top = RacaLabel.Bottom + 5;
+
+            SexoLabel.Top = RacaTextBox.Bottom + 10;
+            SexoComboBox.Top = SexoLabel.Bottom + 5;
+
+            DataNascimentoLabel.Top = SexoComboBox.Bottom + 10;
+            DataNascimentoDateTimerPicker.Top = DataNascimentoLabel.Bottom + 5;
+
+            ObservacaoLabel.Top = DataNascimentoDateTimerPicker.Bottom + 10;
+            ObservacoesTextBox.Top = ObservacaoLabel.Bottom + 5;
+
+            SalvarButton.Top = ObservacoesTextBox.Bottom + 10;
+            CancelarButton.Top = ObservacoesTextBox.Bottom + 10;
+
+            // Ajusta a altura do panelCentral somando altura do último controle + margem
+            int alturaPanel = SalvarButton.Bottom + 20;
+            panelCentral.Height = alturaPanel;
+
+            // Ajusta a altura do Form para caber o panelCentral + margem
+            this.Height = panelCentral.Top + panelCentral.Height + 20;
+
+            // Centraliza horizontalmente
+            panelCentral.Left = (this.ClientSize.Width - panelCentral.Width) / 2;
+        }
+
+
+        private void MostrarErro(string mensagem)
+        {
+            LabelErro.Text = mensagem;
+            LabelErro.Visible = true;
+
+            LabelErro.MaximumSize = new Size(panelCentral.Width - 50, 0);
+            LabelErro.AutoSize = true;
+            AjustarPosicaoECrescimentoForm();
+            this.StartPosition = FormStartPosition.CenterParent;
+
         }
 
         private void CancelarButton_Click(object sender, EventArgs e)

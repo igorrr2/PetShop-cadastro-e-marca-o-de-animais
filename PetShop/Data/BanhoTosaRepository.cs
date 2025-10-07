@@ -23,8 +23,8 @@ namespace PetShop.Data
             string sql = @"
                 CREATE TABLE IF NOT EXISTS BanhoTosaAgendamentos (
                     Id TEXT PRIMARY KEY,
-                    NomeAnimalAgendado TEXT NOT NULL,
-                    NomeTutorAnimal TEXT NOT NULL,
+                    IdAgendamentoBancoServidor TEXT,
+                    AnimalId TEXT,
                     ModalidadeAgendamento TEXT NOT NULL,
                     DataAgendamento DATETIME NOT NULL,
                     Observacoes TEXT
@@ -76,26 +76,25 @@ namespace PetShop.Data
                 {
                     banhoTosa.Id = Guid.NewGuid();
                     sql = @"INSERT INTO BanhoTosaAgendamentos 
-                            (Id, DataAgendamento, ModalidadeAgendamento, NomeAnimalAgendado, NomeTutorAnimal, Observacoes) 
-                            VALUES (@Id, @DataAgendamento, @ModalidadeAgendamento, @NomeAnimalAgendado, @NomeTutorAnimal, @Observacoes)";
+                            (Id, IdAgendamentoBancoServidor, AnimalId, DataAgendamento, ModalidadeAgendamento, Observacoes) 
+                            VALUES (@Id, @IdAgendamentoBancoServidor, @AnimalId, @DataAgendamento, @ModalidadeAgendamento, @Observacoes)";
                 }
                 else // Atualizar registro existente
                 {
                     sql = @"UPDATE BanhoTosaAgendamentos SET
+                            IdAgendamentoBancoServidor = @IdAgendamentoBancoServidor,
                             DataAgendamento = @DataAgendamento,
                             ModalidadeAgendamento = @ModalidadeAgendamento,
-                            NomeAnimalAgendado = @NomeAnimalAgendado,
-                            NomeTutorAnimal = @NomeTutorAnimal,
                             Observacoes = @Observacoes
                             WHERE Id = @Id";
                 }
 
                 using var cmd = new SqliteCommand(sql, conexao);
                 cmd.Parameters.AddWithValue("@Id", banhoTosa.Id.ToString());
+                cmd.Parameters.AddWithValue("@AnimalId", banhoTosa.AnimalId.ToString());
+                cmd.Parameters.AddWithValue("@IdAgendamentoBancoServidor", banhoTosa.IdAgendamentoBancoServidor.ToString());
                 cmd.Parameters.AddWithValue("@DataAgendamento", banhoTosa.DataAgendamento.ToString("yyyy-MM-dd HH:mm:ss"));
                 cmd.Parameters.AddWithValue("@ModalidadeAgendamento", banhoTosa.ModalidadeAgendamento);
-                cmd.Parameters.AddWithValue("@NomeAnimalAgendado", banhoTosa.NomeAnimalAgendado);
-                cmd.Parameters.AddWithValue("@NomeTutorAnimal", banhoTosa.NomeTutorAnimal);
                 cmd.Parameters.AddWithValue("@Observacoes", banhoTosa.Observacoes);
 
                 cmd.ExecuteNonQuery();
@@ -154,7 +153,20 @@ namespace PetShop.Data
 
                 while (reader.Read())
                 {
-                    banhoTosaList.Add(LerBanhoTosa(reader));
+                    var banho = LerBanhoTosa(reader);
+
+                    // Pega os dados do animal via AnimalId
+                    if (banho.AnimalId != Guid.Empty)
+                    {
+                        AnimalRepository.TryGet(banho.AnimalId, out Animal animal);
+                        if (animal != null)
+                        {
+                            banho.NomeAnimalAgendado = animal.NomeAnimal;
+                            banho.NomeTutorAnimal = animal.NomeTutor;
+                        }
+                    }
+
+                    banhoTosaList.Add(banho);
                 }
                 return new Mensagem();
             }
@@ -198,10 +210,10 @@ namespace PetShop.Data
             return new BanhoTosa
             {
                 Id = Guid.Parse(reader["Id"].ToString()),
+                AnimalId = Guid.Parse(reader["AnimalId"].ToString()),
+                IdAgendamentoBancoServidor = Guid.Parse(reader["IdAgendamentoBancoServidor"].ToString()),
                 DataAgendamento = DateTime.Parse(reader["DataAgendamento"].ToString()),
                 ModalidadeAgendamento = reader["ModalidadeAgendamento"].ToString(),
-                NomeAnimalAgendado = reader["NomeAnimalAgendado"].ToString(),
-                NomeTutorAnimal = reader["NomeTutorAnimal"].ToString(),
                 Observacoes = reader["Observacoes"].ToString()
             };
         }
