@@ -120,6 +120,9 @@
   <data name="ErroAoObterRegistroNoBanco" xml:space="preserve">
     <value>Erro ao obter registro no banco, detalhes: '{0}'</value>
   </data>
+  <data name="ErroAoProcessarDados" xml:space="preserve">
+    <value>Erro ao processar dados no webService, detalhes: '{0}'</value>
+  </data>
   <data name="ErroAoSalvar" xml:space="preserve">
     <value>Erro ao salvar registro na tabela '{0}', detalhes: '{1}'</value>
   </data>

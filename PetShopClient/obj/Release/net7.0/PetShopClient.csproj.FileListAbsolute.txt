@@ -1,0 +1,14 @@
+C:\Igor\ProjetoPetShop\AplicacaoWindows\PetShopClient\bin\Release\net7.0\PetShopClient.deps.json
+C:\Igor\ProjetoPetShop\AplicacaoWindows\PetShopClient\bin\Release\net7.0\PetShopClient.dll
+C:\Igor\ProjetoPetShop\AplicacaoWindows\PetShopClient\bin\Release\net7.0\PetShopClient.pdb
+C:\Igor\ProjetoPetShop\AplicacaoWindows\PetShopClient\bin\Release\net7.0\ApiPetShopLibrary.dll
+C:\Igor\ProjetoPetShop\AplicacaoWindows\PetShopClient\obj\Release\net7.0\PetShopClient.csproj.AssemblyReference.cache
+C:\Igor\ProjetoPetShop\AplicacaoWindows\PetShopClient\obj\Release\net7.0\PetShopClient.GeneratedMSBuildEditorConfig.editorconfig
+C:\Igor\ProjetoPetShop\AplicacaoWindows\PetShopClient\obj\Release\net7.0\PetShopClient.AssemblyInfoInputs.cache
+C:\Igor\ProjetoPetShop\AplicacaoWindows\PetShopClient\obj\Release\net7.0\PetShopClient.AssemblyInfo.cs
+C:\Igor\ProjetoPetShop\AplicacaoWindows\PetShopClient\obj\Release\net7.0\PetShopClient.csproj.CoreCompileInputs.cache
+C:\Igor\ProjetoPetShop\AplicacaoWindows\PetShopClient\obj\Release\net7.0\PetShopClient.csproj.CopyComplete
+C:\Igor\ProjetoPetShop\AplicacaoWindows\PetShopClient\obj\Release\net7.0\PetShopClient.dll
+C:\Igor\ProjetoPetShop\AplicacaoWindows\PetShopClient\obj\Release\net7.0\refint\PetShopClient.dll
+C:\Igor\ProjetoPetShop\AplicacaoWindows\PetShopClient\obj\Release\net7.0\PetShopClient.pdb
+C:\Igor\ProjetoPetShop\AplicacaoWindows\PetShopClient\obj\Release\net7.0\ref\PetShopClient.dll

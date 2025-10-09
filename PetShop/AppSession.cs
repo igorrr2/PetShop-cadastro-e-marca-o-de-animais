@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ApiPetShopLibrary.Login;
+using PetShopClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,8 +15,10 @@ namespace PetShop
 
         public static bool EstaLogado => !string.IsNullOrEmpty(Token);
 
-        public static void Logout()
+        public static async Task Logout()
         {
+            Client cliente = new Client();
+            DeslogarResposta resultado = await cliente.DeslogarAsync(Token);
             Token = null;
             Usuario = null;
         }

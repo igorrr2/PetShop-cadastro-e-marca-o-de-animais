@@ -1,6 +1,8 @@
-﻿using PetShop.Data;
+﻿using Microsoft.VisualBasic.Logging;
+using PetShop.Data;
 using PetShop.Mensagens;
 using PetShop.Models;
+using PetShopClient;
 using System;
 using System.Drawing;
 using System.Security.Cryptography.X509Certificates;
@@ -127,11 +129,26 @@ namespace PetShop.Telas
             return true;
         }
 
-        private void SalvarButton_Click(object sender, EventArgs e)
+        public void MontarSolicitacaoCadastrarAnimal(out ApiPetShopLibrary.Animal.AnimalSolicitacao solicitacao)
         {
-            Mensagem mensagem = new Mensagem();
-            AnimalAtual = animalBindingSource.Current as Animal;
+            solicitacao = new ApiPetShopLibrary.Animal.AnimalSolicitacao();
+            solicitacao.Token = AppSession.Token;
+            solicitacao.Animal.AnimalId = string.Empty;
+            solicitacao.Animal = new ApiPetShopLibrary.Animal.AnimalDto();
+            solicitacao.Animal.Raca = AnimalAtual.Raca;
+            solicitacao.Animal.NomeAnimal = AnimalAtual.NomeAnimal;
+            solicitacao.Animal.DataNascimento = AnimalAtual.DataNascimento;
+            solicitacao.Animal.NomeTutor = AnimalAtual.NomeTutor;
+            solicitacao.Animal.NumeroTelefoneTutor = AnimalAtual.NumeroTelefoneTutor;
+            solicitacao.Animal.Observacoes = AnimalAtual.Observacoes;
+            solicitacao.Animal.Sexo = AnimalAtual.Sexo;
+        }
+
+        private async void SalvarButton_ClickAsync(object sender, EventArgs e)
+        {
+            AnimalAtual = animalBindingSource.Current as Models.Animal;
             errorProvider.Clear();
+            ApiPetShopLibrary.Animal.AnimalSolicitacao solicitacao;
 
             if (!ValidarCamposPreenchidos())
                 return;
@@ -153,6 +170,20 @@ namespace PetShop.Telas
 
             if (AnimalAtual != null)
             {
+                MontarSolicitacaoCadastrarAnimal(out solicitacao);
+                Client cliente = new Client();
+                (Mensagem mensagem, ApiPetShopLibrary.Animal.AnimalResposta resposta) = await cliente.CadastrarAnimalAsync(solicitacao);
+                if (!mensagem.Sucesso)
+                    MessageBox.Show(string.Format(MensagemErro.ErroAoProcessarDados, mensagem.Descricao), MensagemTitulo.ErroTitulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                if (resposta == null)
+                    MessageBox.Show(string.Format(MensagemErro.ErroAoProcessarDados, "Não foi retornado o objeto resposta"), MensagemTitulo.ErroTitulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                if (resposta.StatusCode != 200)
+                    MessageBox.Show(resposta.MensagemRetorno, MensagemTitulo.ErroTitulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                AnimalAtual.IdAnimalBancoServidor = resposta.Id;
+
                 // Agora você tem todos os dados preenchidos:
                 // animalAtual.Nome, animalAtual.Tipo, animalAtual.Raca, etc.
                 mensagem = AnimalRepository.TrySave(AnimalAtual);

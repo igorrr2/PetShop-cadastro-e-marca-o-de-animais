@@ -70,6 +70,15 @@ namespace PetShop.Mensagens {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Erro ao processar dados no webService, detalhes: &apos;{0}&apos;.
+        /// </summary>
+        internal static string ErroAoProcessarDados {
+            get {
+                return ResourceManager.GetString("ErroAoProcessarDados", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Erro ao salvar registro na tabela &apos;{0}&apos;, detalhes: &apos;{1}&apos;.
         /// </summary>
         internal static string ErroAoSalvar {

@@ -1,0 +1,5 @@
+C:\Igor\ProjetoPetShop\AplicacaoWindows\PetShopClient\obj\Release\net6.0\PetShopClient.csproj.AssemblyReference.cache
+C:\Igor\ProjetoPetShop\AplicacaoWindows\PetShopClient\obj\Release\net6.0\PetShopClient.GeneratedMSBuildEditorConfig.editorconfig
+C:\Igor\ProjetoPetShop\AplicacaoWindows\PetShopClient\obj\Release\net6.0\PetShopClient.AssemblyInfoInputs.cache
+C:\Igor\ProjetoPetShop\AplicacaoWindows\PetShopClient\obj\Release\net6.0\PetShopClient.AssemblyInfo.cs
+C:\Igor\ProjetoPetShop\AplicacaoWindows\PetShopClient\obj\Release\net6.0\PetShopClient.csproj.CoreCompileInputs.cache

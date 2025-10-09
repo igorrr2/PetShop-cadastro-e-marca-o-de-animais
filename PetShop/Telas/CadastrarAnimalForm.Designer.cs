@@ -123,7 +123,7 @@
             SalvarButton.TabIndex = 14;
             SalvarButton.Text = "Salvar";
             SalvarButton.UseVisualStyleBackColor = true;
-            SalvarButton.Click += SalvarButton_Click;
+            SalvarButton.Click += SalvarButton_ClickAsync;
             // 
             // NomeAnimalLabel
             // 
