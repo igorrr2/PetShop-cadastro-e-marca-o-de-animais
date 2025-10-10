@@ -1,4 +1,5 @@
 ﻿using ApiPetShopLibrary.Animal;
+using ApiPetShopLibrary.BanhoTosa;
 using ApiPetShopLibrary.Login;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -15,7 +16,9 @@ namespace PetShopClient
         {
             _httpClient = new HttpClient
             {
-                BaseAddress = new Uri("https://restpetshop.onrender.com/")
+                //BaseAddress = new Uri("https://restpetshop.onrender.com/"),
+                BaseAddress = new Uri("http://localhost:5036/"),
+                Timeout = TimeSpan.FromSeconds(30)
             };
         }
 
@@ -105,7 +108,6 @@ namespace PetShopClient
             }
         }
 
-        // Cadastrar animal
         public async Task<(Mensagem mensagem, AnimalResposta resposta)> CadastrarAnimalAsync(AnimalSolicitacao solicitacao)
         {
             try
@@ -125,7 +127,6 @@ namespace PetShopClient
             }
         }
 
-        // Atualizar animal
         public async Task<(Mensagem mensagem, AnimalResposta resposta)> AtualizarAnimalAsync(AnimalSolicitacao solicitacao)
         {
             try
@@ -145,7 +146,6 @@ namespace PetShopClient
             }
         }
 
-        // Apagar animal
         public async Task<(Mensagem mensagem, AnimalResposta resposta)> ApagarAnimalAsync(AnimalApagarSolicitacao solicitacao)
         {
             try
@@ -163,6 +163,105 @@ namespace PetShopClient
             {
                 return (new Mensagem($"Erro inesperado: {ex.Message}"), null);
             }
+        }
+
+        public async Task<(Mensagem mensagem, AgendamentoBanhoTosaResposta resposta)> ListarAgendamentosAsync(AgendamentoBanhoTosaListarSolicitacao solicitacao)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"api/BanhoTosa/ListarAgendamentosBanhoTosa?Token={solicitacao.Token}");
+                response.EnsureSuccessStatusCode();
+                var resultado = await response.Content.ReadFromJsonAsync<AgendamentoBanhoTosaResposta>();
+                return (new Mensagem(), resultado);
+            }
+            catch (HttpRequestException ex)
+            {
+                return (new Mensagem($"Erro ao acessar a API: {ex.Message}"), null);
+            }
+            catch (Exception ex)
+            {
+                return (new Mensagem($"Erro inesperado: {ex.Message}"), null);
+            }
+        }
+
+        public async Task<(Mensagem mensagem, AgendamentoBanhoTosaResposta resposta)> CadastrarAgendamentoAsync(AgendamentoBanhoTosaSolicitacao solicitacao)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("api/BanhoTosa/CadastrarAgendamentoBanhoTosa", solicitacao);
+                response.EnsureSuccessStatusCode();
+                var resultado = await response.Content.ReadFromJsonAsync<AgendamentoBanhoTosaResposta>();
+                return (new Mensagem(), resultado);
+            }
+            catch (HttpRequestException ex)
+            {
+                return (new Mensagem($"Erro ao acessar a API: {ex.Message}"), null);
+            }
+            catch (Exception ex)
+            {
+                return (new Mensagem($"Erro inesperado: {ex.Message}"), null);
+            }
+        }
+
+        public async Task<(Mensagem mensagem, AgendamentoBanhoTosaResposta resposta)> AtualizarAgendamentoAsync(AgendamentoBanhoTosaSolicitacao solicitacao)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("api/BanhoTosa/AtualizarAgendamentoBanhoTosa", solicitacao);
+                response.EnsureSuccessStatusCode();
+                var resultado = await response.Content.ReadFromJsonAsync<AgendamentoBanhoTosaResposta>();
+                return (new Mensagem(), resultado);
+            }
+            catch (HttpRequestException ex)
+            {
+                return (new Mensagem($"Erro ao acessar a API: {ex.Message}"), null);
+            }
+            catch (Exception ex)
+            {
+                return (new Mensagem($"Erro inesperado: {ex.Message}"), null);
+            }
+        }
+
+        public async Task<(Mensagem mensagem, AgendamentoBanhoTosaResposta resposta)> ApagarAgendamentoAsync(AgendamentoBanhoTosaApagarSolicitacao solicitacao)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("api/BanhoTosa/ApagarAgendamentoBanhoTosa", solicitacao);
+                response.EnsureSuccessStatusCode();
+                var resultado = await response.Content.ReadFromJsonAsync<AgendamentoBanhoTosaResposta>();
+                return (new Mensagem(), resultado);
+            }
+            catch (HttpRequestException ex)
+            {
+                return (new Mensagem($"Erro ao acessar a API: {ex.Message}"), null);
+            }
+            catch (Exception ex)
+            {
+                return (new Mensagem($"Erro inesperado: {ex.Message}"), null);
+            }
+        }
+
+        public async Task<(Mensagem mensagem, AlterarSenhaResposta resposta)> AlterarSenhaAsync(AlterarSenhaSolicitacao solicitacao)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("Login/AlterarSenha", solicitacao);
+
+                response.EnsureSuccessStatusCode();
+
+                var alterarSenhaResposta = await response.Content.ReadFromJsonAsync<AlterarSenhaResposta>();
+
+                return (new Mensagem(), alterarSenhaResposta);
+            }
+            catch (HttpRequestException ex)
+            {
+                return (new Mensagem($"Erro ao acessar a API: {ex.Message}"), null);
+            }
+            catch (Exception ex)
+            {
+                return (new Mensagem($"Erro inesperado: {ex.Message}"), null);
+            }
+
         }
     }
 }

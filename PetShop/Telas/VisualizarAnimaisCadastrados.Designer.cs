@@ -62,7 +62,7 @@ namespace PetShop.Telas
             dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView.Size = new Size(1000, 480);
             dataGridView.TabIndex = 0;
-            dataGridView.CellClick += DataGridView_CellClick;
+            dataGridView.CellClick += DataGridView_CellClickAsync;
             // 
             // panelTitulo
             // 

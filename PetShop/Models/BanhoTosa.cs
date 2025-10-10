@@ -10,7 +10,9 @@ namespace PetShop.Models
     {
         public Guid Id { get; set; }
 
-        public Guid IdAgendamentoBancoServidor { get; set; }
+        public string IdAgendamentoBancoServidor { get; set; }
+
+        public string UsuarioId { get; set; }
 
         public Guid AnimalId { get; set; }
 
@@ -24,8 +26,8 @@ namespace PetShop.Models
         public string NomeTutorAnimal { get; set; }
 
         public BanhoTosa() {
-            ModalidadeAgendamento = Observacoes = string.Empty;
-            Id = IdAgendamentoBancoServidor = AnimalId = Guid.Empty;
+            IdAgendamentoBancoServidor = UsuarioId = ModalidadeAgendamento = Observacoes = string.Empty;
+            Id = AnimalId = Guid.Empty;
             DataAgendamento = DateTime.Now;
         }
 

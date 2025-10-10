@@ -24,6 +24,7 @@ namespace PetShop.Data
             CREATE TABLE IF NOT EXISTS Animal (
                 Id TEXT PRIMARY KEY,
                 IdAnimalBancoServidor TEXT,
+                UsuarioId TEXT,
                 NomeAnimal TEXT NOT NULL,
                 NomeTutor TEXT NOT NULL,
                 Raca TEXT NOT NULL,
@@ -55,7 +56,8 @@ namespace PetShop.Data
                     animal = new Animal
                     {
                         Id = Guid.Parse(reader["Id"].ToString()),
-                        IdAnimalBancoServidor = reader["Id"].ToString(),
+                        IdAnimalBancoServidor = reader["IdAnimalBancoServidor"].ToString(),
+                        UsuarioId = reader["UsuarioId"].ToString(),
                         NomeAnimal = reader["NomeAnimal"].ToString(),
                         NomeTutor = reader["NomeTutor"].ToString(),
                         Raca = reader["Raca"].ToString(),
@@ -91,13 +93,14 @@ namespace PetShop.Data
                 if (animal.Id == Guid.Empty) // Novo registro
                 {
                     animal.Id = Guid.NewGuid();
-                    sql = @"INSERT INTO Animal (Id, IdAnimalBancoServidor, NomeAnimal, NomeTutor, Raca, Sexo, DataNascimento, Observacoes, NumeroTelefoneTutor) 
-                            VALUES (@Id, @IdAnimalBancoServidor, @NomeAnimal, @NomeTutor, @Raca, @Sexo, @DataNascimento, @Observacoes, @NumeroTelefoneTutor)";
+                    sql = @"INSERT INTO Animal (Id, IdAnimalBancoServidor, UsuarioId, NomeAnimal, NomeTutor, Raca, Sexo, DataNascimento, Observacoes, NumeroTelefoneTutor) 
+                            VALUES (@Id, @IdAnimalBancoServidor, @UsuarioId, @NomeAnimal, @NomeTutor, @Raca, @Sexo, @DataNascimento, @Observacoes, @NumeroTelefoneTutor)";
                 }
                 else // Atualizar registro existente
                 {
                     sql = @"UPDATE Animal SET
                             IdAnimalBancoServidor = @IdAnimalBancoServidor,
+                            UsuarioId = @UsuarioId,
                             NomeAnimal = @NomeAnimal,
                             NomeTutor = @NomeTutor,
                             Raca = @Raca,
@@ -111,6 +114,7 @@ namespace PetShop.Data
                 using var cmd = new SqliteCommand(sql, conexao);
                 cmd.Parameters.AddWithValue("@Id", animal.Id.ToString());
                 cmd.Parameters.AddWithValue("@IdAnimalBancoServidor", animal.IdAnimalBancoServidor);
+                cmd.Parameters.AddWithValue("@UsuarioId", animal.UsuarioId);
                 cmd.Parameters.AddWithValue("@NomeAnimal", animal.NomeAnimal);
                 cmd.Parameters.AddWithValue("@NomeTutor", animal.NomeTutor);
                 cmd.Parameters.AddWithValue("@Raca", animal.Raca);
@@ -128,7 +132,6 @@ namespace PetShop.Data
             }
         }
 
-        // Método para deletar
         public static Mensagem TryDelete(Guid id)
         {
             try
@@ -157,7 +160,7 @@ namespace PetShop.Data
                 using var conexao = new SqliteConnection(_caminhoBanco);
                 conexao.Open();
 
-                string sql = "SELECT * FROM Animal";
+                string sql = $"SELECT * FROM Animal where UsuarioId = '{AppSession.UsuarioId}'";
                 using var cmd = new SqliteCommand(sql, conexao);
                 using var reader = cmd.ExecuteReader();
 
@@ -167,6 +170,7 @@ namespace PetShop.Data
                     {
                         Id = Guid.Parse(reader["Id"].ToString()),
                         IdAnimalBancoServidor = reader["IdAnimalBancoServidor"].ToString(),
+                        UsuarioId = reader["UsuarioId"].ToString(),
                         NomeAnimal = reader["NomeAnimal"].ToString(),
                         NomeTutor = reader["NomeTutor"].ToString(),
                         Raca = reader["Raca"].ToString(),

@@ -132,9 +132,8 @@ namespace PetShop.Telas
         public void MontarSolicitacaoCadastrarAnimal(out ApiPetShopLibrary.Animal.AnimalSolicitacao solicitacao)
         {
             solicitacao = new ApiPetShopLibrary.Animal.AnimalSolicitacao();
-            solicitacao.Token = AppSession.Token;
-            solicitacao.Animal.AnimalId = string.Empty;
             solicitacao.Animal = new ApiPetShopLibrary.Animal.AnimalDto();
+            solicitacao.Token = AppSession.Token;
             solicitacao.Animal.Raca = AnimalAtual.Raca;
             solicitacao.Animal.NomeAnimal = AnimalAtual.NomeAnimal;
             solicitacao.Animal.DataNascimento = AnimalAtual.DataNascimento;
@@ -142,6 +141,7 @@ namespace PetShop.Telas
             solicitacao.Animal.NumeroTelefoneTutor = AnimalAtual.NumeroTelefoneTutor;
             solicitacao.Animal.Observacoes = AnimalAtual.Observacoes;
             solicitacao.Animal.Sexo = AnimalAtual.Sexo;
+            solicitacao.Animal.AnimalId = AnimalAtual.IdAnimalBancoServidor;
         }
 
         private async void SalvarButton_ClickAsync(object sender, EventArgs e)
@@ -170,31 +170,93 @@ namespace PetShop.Telas
 
             if (AnimalAtual != null)
             {
-                MontarSolicitacaoCadastrarAnimal(out solicitacao);
-                Client cliente = new Client();
-                (Mensagem mensagem, ApiPetShopLibrary.Animal.AnimalResposta resposta) = await cliente.CadastrarAnimalAsync(solicitacao);
-                if (!mensagem.Sucesso)
-                    MessageBox.Show(string.Format(MensagemErro.ErroAoProcessarDados, mensagem.Descricao), MensagemTitulo.ErroTitulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Mensagem mensagem = null;
+                ApiPetShopLibrary.Animal.AnimalResposta resposta = null;
+                string mensagemFormularioCarregamento = string.Concat($"Aguarde enquanto o Animal {AnimalAtual.NomeAnimal} está sendo",
+                    string.IsNullOrEmpty(AnimalAtual.IdAnimalBancoServidor) ? " Cadastrado" : " Atualizado");
+                string tituloFormularioCarregamento = string.Concat(string.IsNullOrEmpty(AnimalAtual.IdAnimalBancoServidor) ? " Cadastrando" : " Atualizando", "Animal");
 
-                if (resposta == null)
-                    MessageBox.Show(string.Format(MensagemErro.ErroAoProcessarDados, "Não foi retornado o objeto resposta"), MensagemTitulo.ErroTitulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                if (resposta.StatusCode != 200)
-                    MessageBox.Show(resposta.MensagemRetorno, MensagemTitulo.ErroTitulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                AnimalAtual.IdAnimalBancoServidor = resposta.Id;
-
-                // Agora você tem todos os dados preenchidos:
-                // animalAtual.Nome, animalAtual.Tipo, animalAtual.Raca, etc.
-                mensagem = AnimalRepository.TrySave(AnimalAtual);
-                if (!mensagem.Sucesso)
+                using (var loading = new LoadingForm(
+                    tituloFormularioCarregamento,
+                    mensagemFormularioCarregamento))
                 {
-                    MessageBox.Show(string.Format(MensagemErro.ErroAoSalvar, "Animal", mensagem.Descricao), MensagemTitulo.ErroAoSalvar, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    loading.StartPosition = FormStartPosition.CenterScreen;
+
+                    var task = Task.Run(async () =>
+                    {
+                        try
+                        {
+                            // Monta solicitação
+                            MontarSolicitacaoCadastrarAnimal(out var solicitacao);
+
+                            // Chamada API
+                            Client cliente = new Client();
+                            if (string.IsNullOrEmpty(solicitacao.Animal.AnimalId))
+                                (mensagem, resposta) = await cliente.CadastrarAnimalAsync(solicitacao);
+                            else
+                                (mensagem, resposta) = await cliente.AtualizarAnimalAsync(solicitacao);
+
+                            // Salva local se API retornou OK
+                            if (mensagem.Sucesso && resposta != null && resposta.StatusCode == 200)
+                            {
+                                AnimalAtual.IdAnimalBancoServidor = resposta.Id;
+                                AnimalAtual.UsuarioId = AppSession.UsuarioId;
+                                mensagem = AnimalRepository.TrySave(AnimalAtual);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            mensagem = new Mensagem(ex.Message, ex);
+                        }
+                        finally
+                        {
+                            // Fecha o loading na thread da UI
+                            if (!loading.IsDisposed)
+                                loading.Invoke(new Action(() => loading.Close()));
+                        }
+                    });
+
+                    // Modal → bloqueia interação do usuário
+                    loading.ShowDialog();
+
+                    // Aguarda a task terminar
+                    task.Wait();
+                }
+
+                // Agora o loading já foi fechado → podemos mostrar mensagens e atualizar a UI
+                if (mensagem != null && !mensagem.Sucesso)
+                {
+                    MessageBox.Show(
+                        string.Format(MensagemErro.ErroAoProcessarDados, mensagem.Descricao),
+                        MensagemTitulo.ErroTitulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
-                // Aqui você pode salvar no banco, enviar para a API, etc.
+                if (resposta == null)
+                {
+                    MessageBox.Show(
+                        string.Format(MensagemErro.ErroAoProcessarDados, "Não foi retornado o objeto resposta"),
+                        MensagemTitulo.ErroTitulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (resposta.StatusCode != 200)
+                {
+                    MessageBox.Show(resposta.MensagemRetorno, MensagemTitulo.ErroTitulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (!mensagem.Sucesso)
+                {
+                    MessageBox.Show(
+                        string.Format(MensagemErro.ErroAoSalvar, "Animal", mensagem.Descricao),
+                        MensagemTitulo.ErroAoSalvar, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 MessageBox.Show($"Animal '{AnimalAtual.NomeAnimal}' salvo com sucesso!");
+
+                // Atualiza interface
                 if (IsPopUp)
                 {
                     this.DialogResult = DialogResult.OK;
@@ -208,6 +270,7 @@ namespace PetShop.Telas
                     LabelErro.Text = string.Empty;
                     AjustarPosicaoECrescimentoForm();
                 }
+
             }
         }
 

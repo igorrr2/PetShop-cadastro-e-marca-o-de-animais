@@ -1,5 +1,7 @@
-﻿using PetShop.Data;
+﻿using ApiPetShopLibrary.BanhoTosa;
+using PetShop.Data;
 using PetShop.Models;
+using PetShopClient;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Util.MensagemRetorno;
 
 namespace PetShop.Telas
 {
@@ -144,11 +147,61 @@ namespace PetShop.Telas
 
                     if (confirm == DialogResult.Yes)
                     {
-                        var mensagem = BanhoTosaRepository.TryDelete(banhoTosaSelecionada.Id);
-                        if (!mensagem.Sucesso)
+                        Mensagem mensagem = null;
+                        ApiPetShopLibrary.BanhoTosa.AgendamentoBanhoTosaResposta resposta = null;
+
+                        using (var loading = new LoadingForm(
+                            "Excluindo agendamento...",
+                            $"Aguarde enquanto o agendamento do animal '{banhoTosaSelecionada.NomeAnimalAgendado}' está sendo excluído"))
+                        {
+                            loading.StartPosition = FormStartPosition.CenterScreen;
+
+                            var task = Task.Run(async () =>
+                            {
+                                try
+                                {
+                                    // Monta solicitação para a API
+                                    var solicitacao = new ApiPetShopLibrary.BanhoTosa.AgendamentoBanhoTosaApagarSolicitacao
+                                    {
+                                        Token = AppSession.Token,
+                                        AgendamentoId = banhoTosaSelecionada.IdAgendamentoBancoServidor
+                                    };
+
+                                    // Chamada API
+                                    Client cliente = new Client();
+                                    (mensagem, resposta) = await cliente.ApagarAgendamentoAsync(solicitacao);
+
+                                    // Se API retornou sucesso, exclui local também
+                                    if (mensagem.Sucesso || resposta != null && resposta.StatusCode == 200)
+                                        mensagem = BanhoTosaRepository.TryDelete(banhoTosaSelecionada.Id);
+                                }
+                                catch (Exception ex)
+                                {
+                                    mensagem = new Mensagem(ex.Message, ex);
+                                }
+                                finally
+                                {
+                                    if (!loading.IsDisposed)
+                                        loading.Invoke(new Action(() => loading.Close()));
+                                }
+                            });
+
+                            // Modal → bloqueia interação do usuário
+                            loading.ShowDialog();
+
+                            // Aguarda a task terminar
+                            task.Wait();
+                        }
+
+                        // Atualiza interface e exibe mensagens
+                        if (mensagem != null && !mensagem.Sucesso)
+                        {
                             MessageBox.Show($"Erro ao excluir: {mensagem.Descricao}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                         else
+                        {
                             CarregarDados();
+                        }
                     }
                 }
             }

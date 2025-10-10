@@ -51,5 +51,10 @@ namespace ConverterGuidShortGuid
             Criptografia.Descriptografar(SenhaCriptografadaTextBox.Text, chaveCriptografia, out string senhaDescriptografada);
             SenhaTextBox.Text = senhaDescriptografada;
         }
+
+        private void GerarGuidButton_Click(object sender, EventArgs e)
+        {
+            GuidGeradoTextBox.Text = Guid.NewGuid().ToString();
+        }
     }
 }

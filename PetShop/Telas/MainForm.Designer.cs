@@ -30,9 +30,10 @@ namespace PetShop.Telas
             menuLateral.VisualizarConsultasAgendadasClicked += (s, e) => AbrirFormularioNoPanel(new VisualizarConsultasAgendadas());
             menuLateral.VisualizarBanhoETosasAgendadasClicked += (s, e) => AbrirFormularioNoPanel(new VisualizarBanhoETosasAgendadas());
             menuLateral.VisualizarAnimaisCadastradosClicked += (s, e) => AbrirFormularioNoPanel(new VisualizarAnimaisCadastrados());
+            menuLateral.AlterarSenhaClicked += (s, e) => AbrirFormularioNoPanel(new AlterarSenhaForm());
             menuLateral.LogoutClicked += (s, e) =>
             {
-                AppSession.Logout();
+                AppSession.Logout(this);
                 this.Close();
 
                 LoginForm login = new LoginForm();

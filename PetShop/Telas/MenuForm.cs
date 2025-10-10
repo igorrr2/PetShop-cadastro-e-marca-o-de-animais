@@ -12,6 +12,7 @@ namespace PetShop.Telas
         public event EventHandler VisualizarConsultasAgendadasClicked;
         public event EventHandler AgendarBanhoClicked;
         public event EventHandler VisualizarBanhoETosasAgendadasClicked;
+        public event EventHandler AlterarSenhaClicked;
         public event EventHandler LogoutClicked;
 
         public MenuForm()
@@ -44,6 +45,9 @@ namespace PetShop.Telas
             Button btnVisualizarBanhoETosaAgendados = new Button { Text = "Visualizar Banho e Tosa Agendados", Dock = DockStyle.Top, Height = 50 };
             btnVisualizarBanhoETosaAgendados.Click += (s, e) => VisualizarBanhoETosasAgendadasClicked?.Invoke(this, EventArgs.Empty);
 
+            Button btnAlteraSenha = new Button { Text = "Alterar Senha", Dock = DockStyle.Bottom, Height = 50 };
+            btnAlteraSenha.Click += (s, e) => AlterarSenhaClicked?.Invoke(this, EventArgs.Empty);
+
             Button btnLogout = new Button { Text = "Logout", Dock = DockStyle.Bottom, Height = 50 };
             btnLogout.Click += (s, e) => LogoutClicked?.Invoke(this, EventArgs.Empty);
 
@@ -54,6 +58,7 @@ namespace PetShop.Telas
             this.Controls.Add(btnAgendarConsulta);
             this.Controls.Add(btnVisualizarAnimaisCadastrados);
             this.Controls.Add(btnCadastrarAnimal);
+            this.Controls.Add(btnAlteraSenha);
             this.Controls.Add(btnLogout);
         }
     }

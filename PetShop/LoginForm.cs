@@ -16,30 +16,49 @@ namespace PetShop
             InitializeComponent();
         }
 
-        private static async Task<Mensagem> Logar(string login, string senha)
+        private static async Task<Mensagem> Logar(string login, string senha, Form owner)
         {
+
             Mensagem mensagem = new Mensagem();
-            LoginResposta resposta;
-            try
+            LoginResposta resposta = null;
+
+            using (var loading = new LoadingForm("Efetuando login...", "Aguarde enquanto o login está sendo efetuado"))
             {
-                Client cliente = new Client();
-                (mensagem, resposta) = await cliente.LogarAsync(login, senha);
-                if (!mensagem.Sucesso)
-                    return mensagem;
+                // Mostra modal → bloqueia o usuário
+                loading.StartPosition = FormStartPosition.CenterScreen;
 
-                if(resposta == null)
-                    return new Mensagem("Não foi encontrado nenhum usuário no banco de dados");
+                var task = Task.Run(async () =>
+                {
+                    try
+                    {
+                        Client cliente = new Client();
+                        (mensagem, resposta) = await cliente.LogarAsync(login, senha);
+                    }
+                    catch (Exception ex)
+                    {
+                        mensagem = new Mensagem(ex.Message, ex);
+                    }
+                    finally
+                    {
+                        // fecha o loading na thread da UI
+                        if (!loading.IsDisposed)
+                            loading.Invoke(new Action(() => loading.Close()));
+                    }
+                });
 
-                if(resposta.statusCode != 200)
-                    return new Mensagem(resposta.MensagemRetorno);
-                
-                AppSession.Token = resposta.TokenAutenticacao;
-                AppSession.Usuario = resposta.UsuarioNome;
-
-                return mensagem;
-            }catch (Exception ex){
-                return new Mensagem(ex.Message, ex);
+                loading.ShowDialog(owner);
+                task.Wait();
             }
+
+            if (!mensagem.Sucesso) return mensagem;
+            if (resposta == null) return new Mensagem("Não foi encontrado nenhum usuário no banco de dados");
+            if (resposta.statusCode != 200) return new Mensagem(resposta.MensagemRetorno);
+
+            AppSession.Token = resposta.TokenAutenticacao;
+            AppSession.Usuario = resposta.UsuarioNome;
+            AppSession.UsuarioId = resposta.UsuarioId;
+
+            return mensagem;
         }
 
         private async void Loginbutton_Click(object sender, EventArgs e)
@@ -58,8 +77,9 @@ namespace PetShop
                 SenhaTextBox.Focus();
                 return;
             }
-            Mensagem mensagem = await Logar(LoginTextBox.Text, SenhaTextBox.Text);
-            if (!mensagem.Sucesso){
+            Mensagem mensagem = await Logar(LoginTextBox.Text, SenhaTextBox.Text, this);
+            if (!mensagem.Sucesso)
+            {
                 MessageBox.Show(mensagem.Descricao, MensagemTitulo.ErroTitulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }

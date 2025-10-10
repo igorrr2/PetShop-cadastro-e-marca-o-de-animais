@@ -40,6 +40,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>MensagemTitulo.resx</DependentUpon>
     </Compile>
+    <Compile Update="Telas\AlterarSenhaForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

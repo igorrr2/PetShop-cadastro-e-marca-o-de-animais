@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PetShopClient;
 
 namespace PetShop.Telas
 {
@@ -214,36 +215,120 @@ namespace PetShop.Telas
 
         }
 
-        private void SalvarButton_Click(object sender, EventArgs e)
+        public void MontarSolicitacaoAgendamentoBanhoTosa(Animal animal, out ApiPetShopLibrary.BanhoTosa.AgendamentoBanhoTosaSolicitacao solicitacao)
         {
-            Mensagem mensagem = new Mensagem();
+            solicitacao = new ApiPetShopLibrary.BanhoTosa.AgendamentoBanhoTosaSolicitacao();
+            solicitacao.Agendamento = new ApiPetShopLibrary.BanhoTosa.AgendamentoBanhoTosaDto();
+            solicitacao.Token = AppSession.Token;
+            solicitacao.Agendamento.AnimalId = animal.IdAnimalBancoServidor;
+            solicitacao.Agendamento.DataAgendamento = BanhoTosaAtual.DataAgendamento;
+            solicitacao.Agendamento.AgendamentolId = BanhoTosaAtual.IdAgendamentoBancoServidor;
+            solicitacao.Agendamento.Observacoes = BanhoTosaAtual.Observacoes;
+            solicitacao.Agendamento.ModalidadeAgendamento = BanhoTosaAtual.ModalidadeAgendamento;
+            solicitacao.Agendamento.Observacoes = BanhoTosaAtual.Observacoes;
+        }
+
+        private async void SalvarButton_Click(object sender, EventArgs e)
+        {
             BanhoTosaAtual = BanhoTosaBindingSource.Current as BanhoTosa;
             errorProvider.Clear();
+            ApiPetShopLibrary.BanhoTosa.AgendamentoBanhoTosaSolicitacao solicitacao;
 
             if (!ValidarCamposPreenchidos())
                 return;
 
             if (BanhoTosaAtual != null)
             {
-                mensagem = AnimalRepository.TryGet(BanhoTosaAtual.AnimalId, out Animal animal);
-                if (!mensagem.Sucesso || animal == null)
-                {
-                    MessageBox.Show(string.Format(MensagemErro.ErroAoObterRegistroNoBanco, mensagem.Descricao), MensagemTitulo.ErroTitulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
+                Mensagem mensagem = null;
+                ApiPetShopLibrary.BanhoTosa.AgendamentoBanhoTosaResposta resposta = null;
 
-                BanhoTosaAtual.IdAgendamentoBancoServidor = Guid.NewGuid();
-                mensagem = BanhoTosaRepository.TrySave(BanhoTosaAtual);
+                mensagem = AnimalRepository.TryGet(BanhoTosaAtual.AnimalId, out Animal animal);
                 if (!mensagem.Sucesso)
                 {
-                    MessageBox.Show(string.Format(MensagemErro.ErroAoSalvar, "BanhoTosaAgendamentos", mensagem.Descricao), MensagemTitulo.ErroAoSalvar, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(string.Format(MensagemErro.ErroAoObterRegistroNoBanco, mensagem.Descricao), MensagemTitulo.ErroAoSalvar, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
-                // Aqui você pode salvar no banco, enviar para a API, etc.
-                MessageBox.Show(
-                $"Animal '{animal.NomeAnimal}' agendado com sucesso para o dia/hora '{BanhoTosaAtual.DataAgendamento:dd/MM/yyyy HH:mm}'!"
-                );
+                string mensagemFormularioCarregamento = $"Aguarde enquanto Agendamento de '{BanhoTosaAtual.ModalidadeAgendamento}' para o Animal '{animal.NomeAnimal}' está sendo " +
+                                                        (string.IsNullOrEmpty(BanhoTosaAtual.IdAgendamentoBancoServidor) ? "Cadastrado" : "Atualizado");
+                string tituloFormularioCarregamento = (string.IsNullOrEmpty(BanhoTosaAtual.IdAgendamentoBancoServidor) ? "Cadastrando" : "Atualizando") + " Agendamento";
+
+                using (var loading = new LoadingForm(tituloFormularioCarregamento, mensagemFormularioCarregamento))
+                {
+                    loading.StartPosition = FormStartPosition.CenterScreen;
+
+                    var task = Task.Run(async () =>
+                    {
+                        try
+                        {
+                            // Monta a solicitação
+                            MontarSolicitacaoAgendamentoBanhoTosa(animal, out solicitacao);
+
+                            // Chamada API
+                            Client cliente = new Client();
+                            if (string.IsNullOrEmpty(BanhoTosaAtual.IdAgendamentoBancoServidor))
+                                (mensagem, resposta) = await cliente.CadastrarAgendamentoAsync(solicitacao);
+                            else
+                                (mensagem, resposta) = await cliente.AtualizarAgendamentoAsync(solicitacao);
+
+                            // Salva local se API retornou OK
+                            if (mensagem.Sucesso && resposta != null && resposta.StatusCode == 200)
+                            {
+                                BanhoTosaAtual.IdAgendamentoBancoServidor = resposta.Id;
+                                BanhoTosaAtual.UsuarioId = AppSession.UsuarioId;
+                                mensagem = BanhoTosaRepository.TrySave(BanhoTosaAtual);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            mensagem = new Mensagem(ex.Message, ex);
+                        }
+                        finally
+                        {
+                            // Fecha o loading na thread da UI
+                            if (!loading.IsDisposed)
+                                loading.Invoke(new Action(() => loading.Close()));
+                        }
+                    });
+
+                    // Modal → bloqueia interação do usuário
+                    loading.ShowDialog();
+
+                    // Aguarda a task terminar
+                    task.Wait();
+                }
+
+                // Loading fechado → podemos mostrar mensagens e atualizar UI
+                if (mensagem != null && !mensagem.Sucesso)
+                {
+                    MessageBox.Show(string.Format(MensagemErro.ErroAoProcessarDados, mensagem.Descricao),
+                        MensagemTitulo.ErroTitulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (resposta == null)
+                {
+                    MessageBox.Show(string.Format(MensagemErro.ErroAoProcessarDados, "Não foi retornado o objeto resposta"),
+                        MensagemTitulo.ErroTitulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (resposta.StatusCode != 200)
+                {
+                    MessageBox.Show(resposta.MensagemRetorno, MensagemTitulo.ErroTitulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (!mensagem.Sucesso)
+                {
+                    MessageBox.Show(string.Format(MensagemErro.ErroAoSalvar, "Agendamento", mensagem.Descricao),
+                        MensagemTitulo.ErroAoSalvar, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                MessageBox.Show($"Animal '{animal.NomeAnimal}' agendado com sucesso para '{BanhoTosaAtual.DataAgendamento:dd/MM/yyyy HH:mm}'!");
+
+                // Atualiza interface
                 if (IsPopUp)
                 {
                     this.DialogResult = DialogResult.OK;
@@ -252,7 +337,6 @@ namespace PetShop.Telas
                 else
                 {
                     BanhoTosaAtual = new BanhoTosa();
-                    //BanhoTosaBindingSource.DataSource = BanhoTosaAtual;
 
                     NomeAnimalAgendadoCombobox.DataBindings.Clear();
                     NomeAnimalAgendadoCombobox.SelectedValue = string.Empty;
@@ -262,11 +346,12 @@ namespace PetShop.Telas
                     ObservacoesTextBox.DataBindings.Clear();
                     LabelErro.Visible = false;
                     LabelErro.Text = string.Empty;
+
                     AjustarPosicaoECrescimentoForm();
-                    // Reconfigura bindings
                     ConfigurarBinding();
                 }
             }
         }
+
     }
 }

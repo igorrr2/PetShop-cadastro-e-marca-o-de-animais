@@ -24,6 +24,7 @@ namespace PetShop.Data
                 CREATE TABLE IF NOT EXISTS BanhoTosaAgendamentos (
                     Id TEXT PRIMARY KEY,
                     IdAgendamentoBancoServidor TEXT,
+                    UsuarioId TEXT,
                     AnimalId TEXT,
                     ModalidadeAgendamento TEXT NOT NULL,
                     DataAgendamento DATETIME NOT NULL,
@@ -76,13 +77,14 @@ namespace PetShop.Data
                 {
                     banhoTosa.Id = Guid.NewGuid();
                     sql = @"INSERT INTO BanhoTosaAgendamentos 
-                            (Id, IdAgendamentoBancoServidor, AnimalId, DataAgendamento, ModalidadeAgendamento, Observacoes) 
-                            VALUES (@Id, @IdAgendamentoBancoServidor, @AnimalId, @DataAgendamento, @ModalidadeAgendamento, @Observacoes)";
+                            (Id, IdAgendamentoBancoServidor, UsuarioId, AnimalId, DataAgendamento, ModalidadeAgendamento, Observacoes) 
+                            VALUES (@Id, @IdAgendamentoBancoServidor, @UsuarioId, @AnimalId, @DataAgendamento, @ModalidadeAgendamento, @Observacoes)";
                 }
                 else // Atualizar registro existente
                 {
                     sql = @"UPDATE BanhoTosaAgendamentos SET
                             IdAgendamentoBancoServidor = @IdAgendamentoBancoServidor,
+                            UsuarioId = @UsuarioId,
                             DataAgendamento = @DataAgendamento,
                             ModalidadeAgendamento = @ModalidadeAgendamento,
                             Observacoes = @Observacoes
@@ -92,7 +94,8 @@ namespace PetShop.Data
                 using var cmd = new SqliteCommand(sql, conexao);
                 cmd.Parameters.AddWithValue("@Id", banhoTosa.Id.ToString());
                 cmd.Parameters.AddWithValue("@AnimalId", banhoTosa.AnimalId.ToString());
-                cmd.Parameters.AddWithValue("@IdAgendamentoBancoServidor", banhoTosa.IdAgendamentoBancoServidor.ToString());
+                cmd.Parameters.AddWithValue("@IdAgendamentoBancoServidor", banhoTosa.IdAgendamentoBancoServidor);
+                cmd.Parameters.AddWithValue("@UsuarioId", banhoTosa.UsuarioId);
                 cmd.Parameters.AddWithValue("@DataAgendamento", banhoTosa.DataAgendamento.ToString("yyyy-MM-dd HH:mm:ss"));
                 cmd.Parameters.AddWithValue("@ModalidadeAgendamento", banhoTosa.ModalidadeAgendamento);
                 cmd.Parameters.AddWithValue("@Observacoes", banhoTosa.Observacoes);
@@ -136,16 +139,16 @@ namespace PetShop.Data
                 string sql;
                 if (Historico)
                 {
-                    sql = @"
+                    sql = $@"
                     SELECT * FROM BanhoTosaAgendamentos
-                    WHERE DATE(DataAgendamento) < DATE('now', 'localtime')
+                    WHERE DataAgendamento < datetime('now', 'localtime') AND UsuarioId = '{AppSession.UsuarioId}' 
                     ORDER BY DataAgendamento ASC";
                 }
                 else
                 {
-                    sql = @"
+                    sql = $@"
                     SELECT * FROM BanhoTosaAgendamentos
-                    WHERE DATE(DataAgendamento) >= DATE('now', 'localtime')
+                    WHERE DataAgendamento >= datetime('now', 'localtime') AND UsuarioId = '{AppSession.UsuarioId}'
                     ORDER BY DataAgendamento ASC";
                 }
                 using var cmd = new SqliteCommand(sql, conexao);
@@ -184,9 +187,9 @@ namespace PetShop.Data
                 using var conexao = new SqliteConnection(_caminhoBanco);
                 conexao.Open();
 
-                string sql = @"
+                string sql = $@"
                     SELECT * FROM BanhoTosaAgendamentos
-                    WHERE DATE(DataAgendamento) = DATE('now', 'localtime')
+                    WHERE DATE(DataAgendamento) = DATE('now', 'localtime') AND UsuarioId = '{AppSession.UsuarioId}'
                     ORDER BY DataAgendamento ASC";
 
                 using var cmd = new SqliteCommand(sql, conexao);
@@ -211,7 +214,8 @@ namespace PetShop.Data
             {
                 Id = Guid.Parse(reader["Id"].ToString()),
                 AnimalId = Guid.Parse(reader["AnimalId"].ToString()),
-                IdAgendamentoBancoServidor = Guid.Parse(reader["IdAgendamentoBancoServidor"].ToString()),
+                IdAgendamentoBancoServidor = reader["IdAgendamentoBancoServidor"].ToString(),
+                UsuarioId = reader["UsuarioId"].ToString(),
                 DataAgendamento = DateTime.Parse(reader["DataAgendamento"].ToString()),
                 ModalidadeAgendamento = reader["ModalidadeAgendamento"].ToString(),
                 Observacoes = reader["Observacoes"].ToString()

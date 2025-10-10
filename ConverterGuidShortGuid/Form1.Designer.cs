@@ -41,6 +41,8 @@
             SenhaCriptografadaTextBox = new TextBox();
             button1 = new Button();
             button2 = new Button();
+            GuidGeradoTextBox = new TextBox();
+            GerarGuidButton = new Button();
             SuspendLayout();
             // 
             // GuidTextBox
@@ -153,11 +155,30 @@
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
+            // GuidGeradoTextBox
+            // 
+            GuidGeradoTextBox.Location = new Point(20, 263);
+            GuidGeradoTextBox.Name = "GuidGeradoTextBox";
+            GuidGeradoTextBox.Size = new Size(221, 23);
+            GuidGeradoTextBox.TabIndex = 14;
+            // 
+            // GerarGuidButton
+            // 
+            GerarGuidButton.Location = new Point(20, 306);
+            GerarGuidButton.Name = "GerarGuidButton";
+            GerarGuidButton.Size = new Size(149, 23);
+            GerarGuidButton.TabIndex = 15;
+            GerarGuidButton.Text = "Gerar Guid";
+            GerarGuidButton.UseVisualStyleBackColor = true;
+            GerarGuidButton.Click += GerarGuidButton_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(GerarGuidButton);
+            Controls.Add(GuidGeradoTextBox);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(label5);
@@ -191,5 +212,7 @@
         private TextBox SenhaCriptografadaTextBox;
         private Button button1;
         private Button button2;
+        private TextBox GuidGeradoTextBox;
+        private Button GerarGuidButton;
     }
 }
