@@ -73,14 +73,14 @@ namespace PetShop.Data
                 conexao.Open();
 
                 string sql;
-                if (banhoTosa.Id == Guid.Empty) // Novo registro
+                if (banhoTosa.Id == Guid.Empty) 
                 {
                     banhoTosa.Id = Guid.NewGuid();
                     sql = @"INSERT INTO BanhoTosaAgendamentos 
                             (Id, IdAgendamentoBancoServidor, UsuarioId, AnimalId, DataAgendamento, ModalidadeAgendamento, Observacoes) 
                             VALUES (@Id, @IdAgendamentoBancoServidor, @UsuarioId, @AnimalId, @DataAgendamento, @ModalidadeAgendamento, @Observacoes)";
                 }
-                else // Atualizar registro existente
+                else 
                 {
                     sql = @"UPDATE BanhoTosaAgendamentos SET
                             IdAgendamentoBancoServidor = @IdAgendamentoBancoServidor,
@@ -158,7 +158,6 @@ namespace PetShop.Data
                 {
                     var banho = LerBanhoTosa(reader);
 
-                    // Pega os dados do animal via AnimalId
                     if (banho.AnimalId != Guid.Empty)
                     {
                         AnimalRepository.TryGet(banho.AnimalId, out Animal animal);
@@ -207,7 +206,6 @@ namespace PetShop.Data
             }
         }
 
-        // Método auxiliar para ler os dados
         private static BanhoTosa LerBanhoTosa(SqliteDataReader reader)
         {
             return new BanhoTosa

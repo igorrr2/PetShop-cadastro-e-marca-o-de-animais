@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util", "..\Util\Util.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConverterGuidShortGuid", "..\ConverterGuidShortGuid\ConverterGuidShortGuid.csproj", "{CC6972B9-D46A-4C8D-8E9C-17559F35A7C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetShopClient", "..\PetShopClient\PetShopClient.csproj", "{826F52A7-F146-4F24-8406-DC59690F7FC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetShopClient", "..\PetShopClient\PetShopClient.csproj", "{826F52A7-F146-4F24-8406-DC59690F7FC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CadastrarUsuario", "..\CadastrarUsuario\CadastrarUsuario.csproj", "{372A475A-017C-4130-9ED6-F085B08DD9BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{826F52A7-F146-4F24-8406-DC59690F7FC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{826F52A7-F146-4F24-8406-DC59690F7FC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{826F52A7-F146-4F24-8406-DC59690F7FC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{372A475A-017C-4130-9ED6-F085B08DD9BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{372A475A-017C-4130-9ED6-F085B08DD9BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{372A475A-017C-4130-9ED6-F085B08DD9BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{372A475A-017C-4130-9ED6-F085B08DD9BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

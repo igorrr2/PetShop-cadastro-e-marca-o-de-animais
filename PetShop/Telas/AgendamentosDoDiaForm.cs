@@ -11,7 +11,6 @@ namespace PetShop.Telas
         {
             InitializeComponent();
 
-            // Cria DataGridView dinamicamente
             var dgv = new DataGridView
             {
                 Dock = DockStyle.Fill,

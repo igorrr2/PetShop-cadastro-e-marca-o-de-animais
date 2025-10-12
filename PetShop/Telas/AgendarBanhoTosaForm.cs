@@ -61,10 +61,9 @@ namespace PetShop.Telas
                 }
             }
             BanhoTosaBindingSource.DataSource = BanhoTosaAtual;
-            // 1️⃣ Configura DataSource do ComboBox
             NomeAnimalAgendadoCombobox.DataSource = ListaAnimaisCadastrados;
-            NomeAnimalAgendadoCombobox.DisplayMember = nameof(Animal.NomeAnimal); // o que aparece
-            NomeAnimalAgendadoCombobox.ValueMember = nameof(Animal.NomeAnimal);   // valor usado para seleção
+            NomeAnimalAgendadoCombobox.DisplayMember = nameof(Animal.NomeAnimal); 
+            NomeAnimalAgendadoCombobox.ValueMember = nameof(Animal.NomeAnimal);   
             NomeAnimalAgendadoCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
 
 
@@ -163,7 +162,6 @@ namespace PetShop.Telas
 
         private void AjustarPosicaoECrescimentoForm()
         {
-            // Reposiciona campos baseado na label de erro
             int yInicial = LabelErro.Visible ? LabelErro.Bottom + 10 : 18;
 
             NomeAnimalAgendadoLabel.Top = yInicial;
@@ -181,7 +179,6 @@ namespace PetShop.Telas
             SalvarButton.Top = ObservacoesTextBox.Bottom + 10;
             CancelarButton.Top = ObservacoesTextBox.Bottom + 10;
 
-            // Soma a altura de todos os controles do panelCentral
             int alturaTotal = 0;
             foreach (Control ctrl in panelCentral.Controls)
             {
@@ -193,13 +190,11 @@ namespace PetShop.Telas
                 }
             }
 
-            int margemExtra = 25; // espaço abaixo do último controle
+            int margemExtra = 25;
             panelCentral.Height = alturaTotal + margemExtra;
-
-            // Define altura do formulário
+          
             this.Height = panelCentral.Top + panelCentral.Height + margemExtra;
 
-            // Centraliza horizontalmente
             panelCentral.Left = (this.ClientSize.Width - panelCentral.Width) / 2;
         }
 
@@ -261,17 +256,14 @@ namespace PetShop.Telas
                     {
                         try
                         {
-                            // Monta a solicitação
                             MontarSolicitacaoAgendamentoBanhoTosa(animal, out solicitacao);
 
-                            // Chamada API
                             Client cliente = new Client();
                             if (string.IsNullOrEmpty(BanhoTosaAtual.IdAgendamentoBancoServidor))
                                 (mensagem, resposta) = await cliente.CadastrarAgendamentoAsync(solicitacao);
                             else
                                 (mensagem, resposta) = await cliente.AtualizarAgendamentoAsync(solicitacao);
 
-                            // Salva local se API retornou OK
                             if (mensagem.Sucesso && resposta != null && resposta.StatusCode == 200)
                             {
                                 BanhoTosaAtual.IdAgendamentoBancoServidor = resposta.Id;
@@ -285,16 +277,13 @@ namespace PetShop.Telas
                         }
                         finally
                         {
-                            // Fecha o loading na thread da UI
                             if (!loading.IsDisposed)
                                 loading.Invoke(new Action(() => loading.Close()));
                         }
                     });
 
-                    // Modal → bloqueia interação do usuário
                     loading.ShowDialog();
 
-                    // Aguarda a task terminar
                     task.Wait();
                 }
 

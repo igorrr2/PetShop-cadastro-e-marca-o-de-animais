@@ -20,17 +20,22 @@ namespace PetShop
 
         private void InitializeComponent()
         {
-            this.StartPosition = FormStartPosition.CenterScreen; 
-            this.WindowState = FormWindowState.Maximized;        
-            errorProvider = new ErrorProvider();
+            components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginForm));
+            errorProvider = new ErrorProvider(components);
             panel1 = new Panel();
             label1 = new Label();
             LoginTextBox = new TextBox();
             Senha = new Label();
             SenhaTextBox = new TextBox();
             EntrarButton = new Button();
+            ((System.ComponentModel.ISupportInitialize)errorProvider).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
+            // 
+            // errorProvider
+            // 
+            errorProvider.ContainerControl = this;
             // 
             // panel1
             // 
@@ -53,10 +58,10 @@ namespace PetShop
             label1.TabIndex = 0;
             label1.Text = "Login";
             // 
-            // textBox1
+            // LoginTextBox
             // 
             LoginTextBox.Location = new Point(80, 64);
-            LoginTextBox.Name = "textBox1";
+            LoginTextBox.Name = "LoginTextBox";
             LoginTextBox.Size = new Size(245, 23);
             LoginTextBox.TabIndex = 1;
             // 
@@ -69,35 +74,38 @@ namespace PetShop
             Senha.TabIndex = 2;
             Senha.Text = "Senha";
             // 
-            // textBox2
+            // SenhaTextBox
             // 
             SenhaTextBox.Location = new Point(80, 113);
-            SenhaTextBox.Name = "textBox2";
+            SenhaTextBox.Name = "SenhaTextBox";
             SenhaTextBox.PasswordChar = '*';
             SenhaTextBox.Size = new Size(245, 23);
             SenhaTextBox.TabIndex = 3;
             // 
-            // button1
+            // EntrarButton
             // 
             EntrarButton.Location = new Point(80, 151);
-            EntrarButton.Name = "button1";
+            EntrarButton.Name = "EntrarButton";
             EntrarButton.Size = new Size(100, 30);
             EntrarButton.TabIndex = 4;
             EntrarButton.Text = "Entrar";
             EntrarButton.UseVisualStyleBackColor = true;
             EntrarButton.Click += Loginbutton_Click;
             // 
-            // Form1
+            // LoginForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Controls.Add(panel1);
-            Name = "Form1";
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Name = "LoginForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Login - PetShop";
+            WindowState = FormWindowState.Maximized;
             Load += Form1_Load;
             Resize += Form1_Resize;
+            ((System.ComponentModel.ISupportInitialize)errorProvider).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ResumeLayout(false);

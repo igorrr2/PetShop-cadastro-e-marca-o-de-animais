@@ -32,13 +32,10 @@ namespace PetShopClient
 
             try
             {
-                // Envia POST para /Login/Logar com body JSON
                 var response = await _httpClient.PostAsJsonAsync("Login/Logar", solicitacao);
 
-                // Lança exceção se não for 2xx
                 response.EnsureSuccessStatusCode();
 
-                // Desserializa JSON de volta para LoginResposta
                 var loginResposta = await response.Content.ReadFromJsonAsync<LoginResposta>();
 
                 return (new Mensagem(), loginResposta);
@@ -62,13 +59,10 @@ namespace PetShopClient
 
             try
             {
-                // Envia POST para /Login/Logar com body JSON
                 var response = await _httpClient.PostAsJsonAsync("Login/Deslogar", solicitacao);
 
-                // Lança exceção se não for 2xx
                 response.EnsureSuccessStatusCode();
 
-                // Desserializa JSON de volta para LoginResposta
                 var loginResposta = await response.Content.ReadFromJsonAsync<DeslogarResposta>();
 
                 return loginResposta;
@@ -241,7 +235,7 @@ namespace PetShopClient
             }
         }
 
-        public async Task<(Mensagem mensagem, AlterarSenhaResposta resposta)> AlterarSenhaAsync(AlterarSenhaSolicitacao solicitacao)
+        public async Task<(Mensagem mensagem, RespostaGenerica resposta)> AlterarSenhaAsync(AlterarSenhaSolicitacao solicitacao)
         {
             try
             {
@@ -249,9 +243,9 @@ namespace PetShopClient
 
                 response.EnsureSuccessStatusCode();
 
-                var alterarSenhaResposta = await response.Content.ReadFromJsonAsync<AlterarSenhaResposta>();
+                var RespostaGenerica = await response.Content.ReadFromJsonAsync<RespostaGenerica>();
 
-                return (new Mensagem(), alterarSenhaResposta);
+                return (new Mensagem(), RespostaGenerica);
             }
             catch (HttpRequestException ex)
             {
@@ -262,6 +256,73 @@ namespace PetShopClient
                 return (new Mensagem($"Erro inesperado: {ex.Message}"), null);
             }
 
+        }
+
+        public async Task<(Mensagem mensagem, UsuariosResposta resposta)> CarregarUsuariosAsync()
+        {
+            try
+            {
+                var resposta = await _httpClient.GetFromJsonAsync<UsuariosResposta>($"Login/ListarUsuarios");
+
+                return (new Mensagem(), resposta);
+            }
+            catch (Exception ex)
+            {
+                return (new Mensagem($"Erro ao acessar a API: {ex.Message}"), null);
+            }
+        } 
+        public async Task<(Mensagem mensagem, RespostaGenerica resposta)> CadastrarUsuarioAsync(CriarUsuarioSolicitacao solicitacao)
+        {
+            try
+            { 
+                var response = await _httpClient.PostAsJsonAsync($"Login/CriarUsuario", solicitacao);
+                var resposta = await response.Content.ReadFromJsonAsync<RespostaGenerica>();
+                return (new Mensagem(), resposta);
+            }
+            catch (Exception ex)
+            {
+                return (new Mensagem($"Erro ao acessar a API: {ex.Message}"), null);
+            }
+        }
+        
+        public async Task<(Mensagem mensagem, RespostaGenerica resposta)>AtualizarUsuarioAsync(AtualizarUsuarioSolicitacao solicitacao)
+        {
+            try
+            { 
+                var response = await _httpClient.PostAsJsonAsync($"Login/AtualizarUsuario", solicitacao);
+                var resposta = await response.Content.ReadFromJsonAsync<RespostaGenerica>();
+                return (new Mensagem(), resposta);
+            }
+            catch (Exception ex)
+            {
+                return (new Mensagem($"Erro ao acessar a API: {ex.Message}"), null);
+            }
+        } 
+        public async Task<(Mensagem mensagem, RespostaGenerica resposta)>ResetarSenhaAsync(AtualizarUsuarioSolicitacao solicitacao)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync($"Login/ResetarSenha", solicitacao);
+                var resposta = await response.Content.ReadFromJsonAsync<RespostaGenerica>();
+                return (new Mensagem(), resposta);
+            }
+            catch (Exception ex)
+            {
+                return (new Mensagem($"Erro ao acessar a API: {ex.Message}"), null);
+            }
+        }
+        public async Task<(Mensagem mensagem, RespostaGenerica resposta)>ApagarUsuarioAsync(AtualizarUsuarioSolicitacao solicitacao)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync($"Login/ApagarUsuario", solicitacao);
+                var resposta = await response.Content.ReadFromJsonAsync<RespostaGenerica>();
+                return (new Mensagem(), resposta);
+            }
+            catch (Exception ex)
+            {
+                return (new Mensagem($"Erro ao acessar a API: {ex.Message}"), null);
+            }
         }
     }
 }

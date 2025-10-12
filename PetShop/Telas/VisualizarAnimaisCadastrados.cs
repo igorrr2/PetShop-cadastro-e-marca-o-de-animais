@@ -24,7 +24,6 @@ namespace PetShop.Telas
 
         public void ConfigurarColunasDataGridView()
         {
-            // Colunas do DataGridView
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn
             {
                 DataPropertyName = nameof(Animal.NomeAnimal),
@@ -75,7 +74,6 @@ namespace PetShop.Telas
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
             });
 
-            // Coluna Editar
             var colEditar = new DataGridViewButtonColumn
             {
                 HeaderText = "Editar",
@@ -85,7 +83,6 @@ namespace PetShop.Telas
             };
             dataGridView.Columns.Add(colEditar);
 
-            // Coluna Excluir
             var colExcluir = new DataGridViewButtonColumn
             {
                 HeaderText = "Excluir",
@@ -170,15 +167,12 @@ namespace PetShop.Telas
                                 {
                                     try
                                     {
-                                        // Monta solicitação
                                         ApiPetShopLibrary.Animal.AnimalApagarSolicitacao solicitacao;
                                         MontarSolicitacaoApagarAnimal(animalSelecionado, out solicitacao);
 
-                                        // Chamada API
                                         Client cliente = new Client();
                                         (mensagem, resposta) = await cliente.ApagarAnimalAsync(solicitacao);
 
-                                        // Deleta local se API OK
                                         if (mensagem != null && mensagem.Sucesso && resposta != null && resposta.StatusCode == 200)
                                         {
                                             mensagem = AnimalRepository.TryDelete(animalSelecionado.Id);
@@ -190,20 +184,16 @@ namespace PetShop.Telas
                                     }
                                     finally
                                     {
-                                        // Fecha o loading na thread da UI
                                         if (!loading.IsDisposed)
                                             loading.Invoke(new Action(() => loading.Close()));
                                     }
                                 });
 
-                                // Mostra modal → bloqueia interação do usuário
                                 loading.ShowDialog();
 
-                                // Aguarda a task terminar
                                 task.Wait();
                             }
 
-                            // Agora o loading já foi fechado → podemos mostrar mensagens e atualizar a UI
                             if (mensagem != null && !mensagem.Sucesso)
                             {
                                 MessageBox.Show($"Erro ao excluir: {mensagem.Descricao}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -224,7 +214,6 @@ namespace PetShop.Telas
                                 return;
                             }
 
-                            // Atualiza interface
                             CarregarDados();
                         }
 

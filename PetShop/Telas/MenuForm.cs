@@ -26,7 +26,6 @@ namespace PetShop.Telas
             this.Dock = DockStyle.Left;
             this.Width = 200;
 
-            // Botões topo
             Button btnCadastrarAnimal = new Button { Text = "Cadastrar Animal", Dock = DockStyle.Top, Height = 50 };
             btnCadastrarAnimal.Click += (s, e) => CadastrarAnimalClicked?.Invoke(this, EventArgs.Empty);
 
@@ -51,7 +50,6 @@ namespace PetShop.Telas
             Button btnLogout = new Button { Text = "Logout", Dock = DockStyle.Bottom, Height = 50 };
             btnLogout.Click += (s, e) => LogoutClicked?.Invoke(this, EventArgs.Empty);
 
-            // Adiciona botões **na ordem que quer que apareçam**
             this.Controls.Add(btnVisualizarBanhoETosaAgendados);
             this.Controls.Add(btnAgendarBanho);
             this.Controls.Add(btnVisualizarConsultasAgendadas);

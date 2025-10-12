@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "zD0e6TS9AZWMahJwaQ1RXeFany73wWfHbLe6Z9LU8CQglZ2534niYhG0PFlGpit+VD9uRedqmgpGf7MkK1xgvw==",
+  "success": true,
+  "projectFilePath": "C:\\Igor\\ProjetoPetShop\\AplicacaoWindows\\CadastrarUsuario\\CadastrarUsuario.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\igorr\\.nuget\\packages\\microsoft.data.sqlite.core\\9.0.9\\microsoft.data.sqlite.core.9.0.9.nupkg.sha512",
+    "C:\\Users\\igorr\\.nuget\\packages\\sourcegear.sqlite3\\3.50.4.2\\sourcegear.sqlite3.3.50.4.2.nupkg.sha512",
+    "C:\\Users\\igorr\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\3.0.2\\sqlitepclraw.bundle_e_sqlite3.3.0.2.nupkg.sha512",
+    "C:\\Users\\igorr\\.nuget\\packages\\sqlitepclraw.config.e_sqlite3\\3.0.2\\sqlitepclraw.config.e_sqlite3.3.0.2.nupkg.sha512",
+    "C:\\Users\\igorr\\.nuget\\packages\\sqlitepclraw.core\\3.0.2\\sqlitepclraw.core.3.0.2.nupkg.sha512",
+    "C:\\Users\\igorr\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\3.0.2\\sqlitepclraw.provider.e_sqlite3.3.0.2.nupkg.sha512",
+    "C:\\Users\\igorr\\.nuget\\packages\\system.memory\\4.6.3\\system.memory.4.6.3.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -79,7 +79,6 @@ namespace PetShop.Data
             return new Mensagem();
         }
 
-        // Método para salvar ou atualizar
         public static Mensagem TrySave(Animal animal)
         {
             if (animal == null) return new Mensagem("Não há animal para salvar.");
@@ -90,13 +89,13 @@ namespace PetShop.Data
                 conexao.Open();
 
                 string sql;
-                if (animal.Id == Guid.Empty) // Novo registro
+                if (animal.Id == Guid.Empty)
                 {
                     animal.Id = Guid.NewGuid();
                     sql = @"INSERT INTO Animal (Id, IdAnimalBancoServidor, UsuarioId, NomeAnimal, NomeTutor, Raca, Sexo, DataNascimento, Observacoes, NumeroTelefoneTutor) 
                             VALUES (@Id, @IdAnimalBancoServidor, @UsuarioId, @NomeAnimal, @NomeTutor, @Raca, @Sexo, @DataNascimento, @Observacoes, @NumeroTelefoneTutor)";
                 }
-                else // Atualizar registro existente
+                else 
                 {
                     sql = @"UPDATE Animal SET
                             IdAnimalBancoServidor = @IdAnimalBancoServidor,

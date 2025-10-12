@@ -34,7 +34,6 @@ namespace PetShop.Telas
 
         public void ConfigurarColunasDataGridView()
         {
-            // Colunas do DataGridView
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn
             {
                 DataPropertyName = nameof(BanhoTosa.NomeAnimalAgendado),
@@ -70,7 +69,6 @@ namespace PetShop.Telas
                 HeaderText = "Observações",
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
             });
-            // Coluna Editar
             var colEditar = new DataGridViewButtonColumn
             {
                 HeaderText = "Editar",
@@ -80,7 +78,6 @@ namespace PetShop.Telas
             };
             dataGridView.Columns.Add(colEditar);
 
-            // Coluna Excluir
             var colExcluir = new DataGridViewButtonColumn
             {
                 HeaderText = "Excluir",
@@ -160,18 +157,15 @@ namespace PetShop.Telas
                             {
                                 try
                                 {
-                                    // Monta solicitação para a API
                                     var solicitacao = new ApiPetShopLibrary.BanhoTosa.AgendamentoBanhoTosaApagarSolicitacao
                                     {
                                         Token = AppSession.Token,
                                         AgendamentoId = banhoTosaSelecionada.IdAgendamentoBancoServidor
                                     };
 
-                                    // Chamada API
                                     Client cliente = new Client();
                                     (mensagem, resposta) = await cliente.ApagarAgendamentoAsync(solicitacao);
 
-                                    // Se API retornou sucesso, exclui local também
                                     if (mensagem.Sucesso || resposta != null && resposta.StatusCode == 200)
                                         mensagem = BanhoTosaRepository.TryDelete(banhoTosaSelecionada.Id);
                                 }
@@ -186,14 +180,11 @@ namespace PetShop.Telas
                                 }
                             });
 
-                            // Modal → bloqueia interação do usuário
                             loading.ShowDialog();
 
-                            // Aguarda a task terminar
                             task.Wait();
                         }
 
-                        // Atualiza interface e exibe mensagens
                         if (mensagem != null && !mensagem.Sucesso)
                         {
                             MessageBox.Show($"Erro ao excluir: {mensagem.Descricao}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);

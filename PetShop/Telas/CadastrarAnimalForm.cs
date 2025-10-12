@@ -49,8 +49,6 @@ namespace PetShop.Telas
                 }
             }
             animalBindingSource.DataSource = AnimalAtual;
-
-            // Associa cada controle ao BindingSource
             NomeAnimalTextBox.DataBindings.Add("Text", animalBindingSource, nameof(Animal.NomeAnimal), false, DataSourceUpdateMode.OnPropertyChanged);
             NomeTutorTextBox.DataBindings.Add("Text", animalBindingSource, nameof(Animal.NomeTutor), false, DataSourceUpdateMode.OnPropertyChanged);
             RacaTextBox.DataBindings.Add("Text", animalBindingSource, nameof(Animal.Raca), false, DataSourceUpdateMode.OnPropertyChanged);
@@ -186,17 +184,14 @@ namespace PetShop.Telas
                     {
                         try
                         {
-                            // Monta solicitação
                             MontarSolicitacaoCadastrarAnimal(out var solicitacao);
 
-                            // Chamada API
                             Client cliente = new Client();
                             if (string.IsNullOrEmpty(solicitacao.Animal.AnimalId))
                                 (mensagem, resposta) = await cliente.CadastrarAnimalAsync(solicitacao);
                             else
                                 (mensagem, resposta) = await cliente.AtualizarAnimalAsync(solicitacao);
 
-                            // Salva local se API retornou OK
                             if (mensagem.Sucesso && resposta != null && resposta.StatusCode == 200)
                             {
                                 AnimalAtual.IdAnimalBancoServidor = resposta.Id;
@@ -210,20 +205,16 @@ namespace PetShop.Telas
                         }
                         finally
                         {
-                            // Fecha o loading na thread da UI
                             if (!loading.IsDisposed)
                                 loading.Invoke(new Action(() => loading.Close()));
                         }
                     });
 
-                    // Modal → bloqueia interação do usuário
                     loading.ShowDialog();
 
-                    // Aguarda a task terminar
                     task.Wait();
                 }
 
-                // Agora o loading já foi fechado → podemos mostrar mensagens e atualizar a UI
                 if (mensagem != null && !mensagem.Sucesso)
                 {
                     MessageBox.Show(
@@ -256,7 +247,6 @@ namespace PetShop.Telas
 
                 MessageBox.Show($"Animal '{AnimalAtual.NomeAnimal}' salvo com sucesso!");
 
-                // Atualiza interface
                 if (IsPopUp)
                 {
                     this.DialogResult = DialogResult.OK;
@@ -276,10 +266,8 @@ namespace PetShop.Telas
 
         private void AjustarPosicaoECrescimentoForm()
         {
-            // Se tiver LabelErro, usa Bottom + margem; senão, usa valor fixo
             int yInicial = (LabelErro != null && LabelErro.Visible) ? LabelErro.Bottom + 10 : 18;
 
-            // Reposiciona todos os campos
             NomeAnimalLabel.Top = yInicial;
             NomeAnimalTextBox.Top = NomeAnimalLabel.Bottom + 5;
 
@@ -304,14 +292,11 @@ namespace PetShop.Telas
             SalvarButton.Top = ObservacoesTextBox.Bottom + 10;
             CancelarButton.Top = ObservacoesTextBox.Bottom + 10;
 
-            // Ajusta a altura do panelCentral somando altura do último controle + margem
             int alturaPanel = SalvarButton.Bottom + 20;
             panelCentral.Height = alturaPanel;
 
-            // Ajusta a altura do Form para caber o panelCentral + margem
             this.Height = panelCentral.Top + panelCentral.Height + 20;
 
-            // Centraliza horizontalmente
             panelCentral.Left = (this.ClientSize.Width - panelCentral.Width) / 2;
         }
 

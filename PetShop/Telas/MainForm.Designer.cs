@@ -11,43 +11,20 @@ namespace PetShop.Telas
 
         private void InitializeComponent()
         {
-            this.StartPosition = FormStartPosition.CenterScreen;
-            this.WindowState = FormWindowState.Maximized;
-
-            // Painel principal
-            panelConteudo = new Panel
-            {
-                Dock = DockStyle.Fill,
-                BackColor = Color.FromArgb(149, 94, 38)
-        };
-            this.Controls.Add(panelConteudo);
-
-            // Menu lateral
-            menuLateral = new MenuForm();
-            menuLateral.CadastrarAnimalClicked += (s, e) => AbrirFormularioNoPanel(new CadastrarAnimalForm(Guid.Empty));
-            menuLateral.AgendarConsultaClicked += (s, e) => AbrirFormularioNoPanel(new AgendarConsultaForm());
-            menuLateral.AgendarBanhoClicked += (s, e) => AbrirFormularioNoPanel(new AgendarBanhoTosaForm(Guid.Empty));
-            menuLateral.VisualizarConsultasAgendadasClicked += (s, e) => AbrirFormularioNoPanel(new VisualizarConsultasAgendadas());
-            menuLateral.VisualizarBanhoETosasAgendadasClicked += (s, e) => AbrirFormularioNoPanel(new VisualizarBanhoETosasAgendadas());
-            menuLateral.VisualizarAnimaisCadastradosClicked += (s, e) => AbrirFormularioNoPanel(new VisualizarAnimaisCadastrados());
-            menuLateral.AlterarSenhaClicked += (s, e) => AbrirFormularioNoPanel(new AlterarSenhaForm());
-            menuLateral.LogoutClicked += (s, e) =>
-            {
-                AppSession.Logout(this);
-                this.Close();
-
-                LoginForm login = new LoginForm();
-                login.StartPosition = FormStartPosition.CenterScreen;
-                login.WindowState = FormWindowState.Maximized;
-                login.Show();
-            };
-
-            this.Controls.Add(menuLateral);
-
-            this.AutoScaleDimensions = new SizeF(7F, 15F);
-            this.AutoScaleMode = AutoScaleMode.Font;
-            this.ClientSize = new Size(800, 450);
-            this.Text = "PetShop - Sistema";
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            SuspendLayout();
+            // 
+            // MainForm
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Name = "MainForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "PetShop - Sistema";
+            WindowState = FormWindowState.Maximized;
+            ResumeLayout(false);
         }
 
         private void AbrirFormularioNoPanel(Form formFilho)

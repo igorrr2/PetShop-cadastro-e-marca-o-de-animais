@@ -72,9 +72,8 @@ namespace PetShop.Telas
             }
 
             Mensagem mensagem = null;
-            AlterarSenhaResposta resposta = null;
+            RespostaGenerica resposta = null;
 
-            // Monta solicitação
             var solicitacao = new AlterarSenhaSolicitacao
             {
                 Token = AppSession.Token, // ou como você estiver armazenando o token

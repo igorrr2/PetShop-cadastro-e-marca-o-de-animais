@@ -23,8 +23,7 @@ namespace PetShop
             LoginResposta resposta = null;
 
             using (var loading = new LoadingForm("Efetuando login...", "Aguarde enquanto o login está sendo efetuado"))
-            {
-                // Mostra modal → bloqueia o usuário
+            { 
                 loading.StartPosition = FormStartPosition.CenterScreen;
 
                 var task = Task.Run(async () =>
@@ -40,7 +39,7 @@ namespace PetShop
                     }
                     finally
                     {
-                        // fecha o loading na thread da UI
+                        
                         if (!loading.IsDisposed)
                             loading.Invoke(new Action(() => loading.Close()));
                     }
@@ -83,13 +82,11 @@ namespace PetShop
                 MessageBox.Show(mensagem.Descricao, MensagemTitulo.ErroTitulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            // Login OK → abrir a tela principal
+            
             MainForm mainForm = new MainForm();
             mainForm.Show();
 
-            // Opcional: esconder ou fechar a tela de login
-            this.Hide(); // só esconde
-                         // this.Close(); // fecha completamente
+            this.Hide(); 
         }
     }
 }
