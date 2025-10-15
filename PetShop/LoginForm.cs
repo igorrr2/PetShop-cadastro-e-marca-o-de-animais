@@ -23,7 +23,7 @@ namespace PetShop
             LoginResposta resposta = null;
 
             using (var loading = new LoadingForm("Efetuando login...", "Aguarde enquanto o login está sendo efetuado"))
-            { 
+            {
                 loading.StartPosition = FormStartPosition.CenterScreen;
 
                 var task = Task.Run(async () =>
@@ -39,7 +39,7 @@ namespace PetShop
                     }
                     finally
                     {
-                        
+
                         if (!loading.IsDisposed)
                             loading.Invoke(new Action(() => loading.Close()));
                     }
@@ -82,11 +82,11 @@ namespace PetShop
                 MessageBox.Show(mensagem.Descricao, MensagemTitulo.ErroTitulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            
+
             MainForm mainForm = new MainForm();
             mainForm.Show();
 
-            this.Hide(); 
+            this.Hide();
         }
     }
 }

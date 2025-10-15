@@ -38,6 +38,45 @@ namespace PetShop.Data
             cmd.ExecuteNonQuery();
         }
 
+        public static Mensagem TryGetByIdAnimalBancoServidor(string IdAgendamentoBancoServidor, out Animal animal)
+        {
+            animal = null;
+            try
+            {
+                using var conexao = new SqliteConnection(_caminhoBanco);
+                conexao.Open();
+
+                string sql = "SELECT * FROM Animal WHERE IdAnimalBancoServidor = @IdAnimalBancoServidor";
+                using var cmd = new SqliteCommand(sql, conexao);
+                cmd.Parameters.AddWithValue("@IdAnimalBancoServidor", IdAgendamentoBancoServidor);
+
+                using var reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    animal = new Animal
+                    {
+                        Id = Guid.Parse(reader["Id"].ToString()),
+                        IdAnimalBancoServidor = reader["IdAnimalBancoServidor"].ToString(),
+                        UsuarioId = reader["UsuarioId"].ToString(),
+                        NomeAnimal = reader["NomeAnimal"].ToString(),
+                        NomeTutor = reader["NomeTutor"].ToString(),
+                        Raca = reader["Raca"].ToString(),
+                        Sexo = reader["Sexo"].ToString(),
+                        DataNascimento = DateTime.Parse(reader["DataNascimento"].ToString()),
+                        Observacoes = reader["Observacoes"].ToString(),
+                        NumeroTelefoneTutor = reader["NumeroTelefoneTutor"].ToString()
+                    };
+                    return new Mensagem();
+                }
+            }
+            catch (Exception ex)
+            {
+                return new Mensagem(ex.Message, ex);
+            }
+
+            return new Mensagem();
+
+        }
         public static Mensagem TryGet(Guid id, out Animal animal)
         {
             animal = null;
@@ -95,7 +134,7 @@ namespace PetShop.Data
                     sql = @"INSERT INTO Animal (Id, IdAnimalBancoServidor, UsuarioId, NomeAnimal, NomeTutor, Raca, Sexo, DataNascimento, Observacoes, NumeroTelefoneTutor) 
                             VALUES (@Id, @IdAnimalBancoServidor, @UsuarioId, @NomeAnimal, @NomeTutor, @Raca, @Sexo, @DataNascimento, @Observacoes, @NumeroTelefoneTutor)";
                 }
-                else 
+                else
                 {
                     sql = @"UPDATE Animal SET
                             IdAnimalBancoServidor = @IdAnimalBancoServidor,

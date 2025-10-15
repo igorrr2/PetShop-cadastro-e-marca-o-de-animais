@@ -35,6 +35,33 @@ namespace PetShop.Data
             cmd.ExecuteNonQuery();
         }
 
+        public static Mensagem TryGetByIdAgendamentoBancoServidor(string IdAgendamentoBancoServidor, out BanhoTosa banhoTosa)
+        {
+            banhoTosa = null;
+            try
+            {
+                using var conexao = new SqliteConnection(_caminhoBanco);
+                conexao.Open();
+
+                string sql = "SELECT * FROM BanhoTosaAgendamentos WHERE IdAgendamentoBancoServidor = @IdAgendamentoBancoServidor";
+                using var cmd = new SqliteCommand(sql, conexao);
+                cmd.Parameters.AddWithValue("@IdAgendamentoBancoServidor", IdAgendamentoBancoServidor);
+
+                using var reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    banhoTosa = LerBanhoTosa(reader); 
+                }
+            }
+            catch (Exception ex)
+            {
+                return new Mensagem(ex.Message, ex);
+            }
+            return new Mensagem();
+
+        }
+
+
         public static Mensagem TryGet(Guid id, out BanhoTosa banhoTosa)
         {
             banhoTosa = null;
