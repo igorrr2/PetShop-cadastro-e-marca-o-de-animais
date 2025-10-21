@@ -6,7 +6,7 @@
         ///  Variável de designer necessária.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-        private System.Windows.Forms.ErrorProvider errorProvider;
+        private ErrorProvider errorProvider;
 
 
         /// <summary>
@@ -25,145 +25,178 @@
 
         private void InitializeComponent()
         {
-            this.lblTitulo = new System.Windows.Forms.Label();
-            this.lblNome = new System.Windows.Forms.Label();
-            this.lblLogin = new System.Windows.Forms.Label();
-            this.lblSenha = new System.Windows.Forms.Label();
-            this.txtNome = new System.Windows.Forms.TextBox();
-            this.txtLogin = new System.Windows.Forms.TextBox();
-            this.txtSenha = new System.Windows.Forms.TextBox();
-            this.btnSalvar = new System.Windows.Forms.Button();
-            this.btnCancelar = new System.Windows.Forms.Button();
-            this.errorProvider = new System.Windows.Forms.ErrorProvider();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
-            this.SuspendLayout();
-
+            components = new System.ComponentModel.Container();
+            lblTitulo = new Label();
+            lblNome = new Label();
+            lblLogin = new Label();
+            lblSenha = new Label();
+            txtNome = new TextBox();
+            txtLogin = new TextBox();
+            txtSenha = new TextBox();
+            btnSalvar = new Button();
+            btnCancelar = new Button();
+            errorProvider = new ErrorProvider(components);
+            AtivoCheckBox = new CheckBox();
+            AtivoLabel = new Label();
+            ((System.ComponentModel.ISupportInitialize)errorProvider).BeginInit();
+            SuspendLayout();
             // 
             // lblTitulo
             // 
-            this.lblTitulo.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
-            this.lblTitulo.Location = new System.Drawing.Point(12, 9);
-            this.lblTitulo.Name = "lblTitulo";
-            this.lblTitulo.Size = new System.Drawing.Size(360, 32);
-            this.lblTitulo.Text = "Cadastrar Novo Usuário";
-            this.lblTitulo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-
+            lblTitulo.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point);
+            lblTitulo.Location = new Point(10, 7);
+            lblTitulo.Name = "lblTitulo";
+            lblTitulo.Size = new Size(315, 24);
+            lblTitulo.TabIndex = 0;
+            lblTitulo.Text = "Cadastrar Novo Usuário";
+            lblTitulo.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblNome
             // 
-            this.lblNome.AutoSize = true;
-            this.lblNome.Location = new System.Drawing.Point(30, 70);
-            this.lblNome.Name = "lblNome";
-            this.lblNome.Size = new System.Drawing.Size(47, 20);
-            this.lblNome.Text = "Nome:";
-
-            // 
-            // txtNome
-            // 
-            this.txtNome.Location = new System.Drawing.Point(120, 67);
-            this.txtNome.Name = "txtNome";
-            this.txtNome.Size = new System.Drawing.Size(250, 27);
-
+            lblNome.AutoSize = true;
+            lblNome.Location = new Point(26, 52);
+            lblNome.Name = "lblNome";
+            lblNome.Size = new Size(43, 15);
+            lblNome.TabIndex = 1;
+            lblNome.Text = "Nome:";
             // 
             // lblLogin
             // 
-            this.lblLogin.AutoSize = true;
-            this.lblLogin.Location = new System.Drawing.Point(30, 110);
-            this.lblLogin.Name = "lblLogin";
-            this.lblLogin.Size = new System.Drawing.Size(48, 20);
-            this.lblLogin.Text = "Login:";
-
-            // 
-            // txtLogin
-            // 
-            this.txtLogin.Location = new System.Drawing.Point(120, 107);
-            this.txtLogin.Name = "txtLogin";
-            this.txtLogin.Size = new System.Drawing.Size(250, 27);
-
+            lblLogin.AutoSize = true;
+            lblLogin.Location = new Point(26, 82);
+            lblLogin.Name = "lblLogin";
+            lblLogin.Size = new Size(40, 15);
+            lblLogin.TabIndex = 3;
+            lblLogin.Text = "Login:";
             // 
             // lblSenha
             // 
-            this.lblSenha.AutoSize = true;
-            this.lblSenha.Location = new System.Drawing.Point(30, 150);
-            this.lblSenha.Name = "lblSenha";
-            this.lblSenha.Size = new System.Drawing.Size(53, 20);
-            this.lblSenha.Text = "Senha:";
-
+            lblSenha.AutoSize = true;
+            lblSenha.Location = new Point(26, 112);
+            lblSenha.Name = "lblSenha";
+            lblSenha.Size = new Size(42, 15);
+            lblSenha.TabIndex = 5;
+            lblSenha.Text = "Senha:";
+            // 
+            // txtNome
+            // 
+            txtNome.Location = new Point(75, 52);
+            txtNome.Margin = new Padding(3, 2, 3, 2);
+            txtNome.Name = "txtNome";
+            txtNome.Size = new Size(219, 23);
+            txtNome.TabIndex = 2;
+            // 
+            // txtLogin
+            // 
+            txtLogin.Location = new Point(75, 82);
+            txtLogin.Margin = new Padding(3, 2, 3, 2);
+            txtLogin.Name = "txtLogin";
+            txtLogin.Size = new Size(219, 23);
+            txtLogin.TabIndex = 4;
             // 
             // txtSenha
             // 
-            this.txtSenha.Location = new System.Drawing.Point(120, 147);
-            this.txtSenha.Name = "txtSenha";
-            this.txtSenha.PasswordChar = '*';
-            this.txtSenha.Size = new System.Drawing.Size(250, 27);
-
+            txtSenha.Location = new Point(75, 112);
+            txtSenha.Margin = new Padding(3, 2, 3, 2);
+            txtSenha.Name = "txtSenha";
+            txtSenha.PasswordChar = '*';
+            txtSenha.Size = new Size(219, 23);
+            txtSenha.TabIndex = 6;
             // 
             // btnSalvar
             // 
-            this.btnSalvar.BackColor = System.Drawing.Color.MediumSeaGreen;
-            this.btnSalvar.ForeColor = System.Drawing.Color.White;
-            this.btnSalvar.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnSalvar.Location = new System.Drawing.Point(120, 200);
-            this.btnSalvar.Name = "btnSalvar";
-            this.btnSalvar.Size = new System.Drawing.Size(110, 35);
-            this.btnSalvar.Text = "Salvar";
-            this.btnSalvar.UseVisualStyleBackColor = false;
-            this.btnSalvar.Click += new System.EventHandler(this.btnSalvar_Click);
-
+            btnSalvar.BackColor = Color.MediumSeaGreen;
+            btnSalvar.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            btnSalvar.ForeColor = Color.White;
+            btnSalvar.Location = new Point(75, 162);
+            btnSalvar.Margin = new Padding(3, 2, 3, 2);
+            btnSalvar.Name = "btnSalvar";
+            btnSalvar.Size = new Size(96, 26);
+            btnSalvar.TabIndex = 7;
+            btnSalvar.Text = "Salvar";
+            btnSalvar.UseVisualStyleBackColor = false;
+            btnSalvar.Click += btnSalvar_Click;
             // 
             // btnCancelar
             // 
-            this.btnCancelar.BackColor = System.Drawing.Color.LightGray;
-            this.btnCancelar.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular);
-            this.btnCancelar.Location = new System.Drawing.Point(260, 200);
-            this.btnCancelar.Name = "btnCancelar";
-            this.btnCancelar.Size = new System.Drawing.Size(110, 35);
-            this.btnCancelar.Text = "Cancelar";
-            this.btnCancelar.UseVisualStyleBackColor = false;
-            this.btnCancelar.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            //
-            //errorProvider
-            //
-            this.errorProvider.ContainerControl = this;
-            this.errorProvider.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
+            btnCancelar.BackColor = Color.LightGray;
+            btnCancelar.DialogResult = DialogResult.Cancel;
+            btnCancelar.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            btnCancelar.Location = new Point(198, 162);
+            btnCancelar.Margin = new Padding(3, 2, 3, 2);
+            btnCancelar.Name = "btnCancelar";
+            btnCancelar.Size = new Size(96, 26);
+            btnCancelar.TabIndex = 8;
+            btnCancelar.Text = "Cancelar";
+            btnCancelar.UseVisualStyleBackColor = false;
+            // 
+            // errorProvider
+            // 
+            errorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink;
+            errorProvider.ContainerControl = this;
+            // 
+            // AtivoCheckBox
+            // 
+            AtivoCheckBox.AutoSize = true;
+            AtivoCheckBox.Location = new Point(75, 143);
+            AtivoCheckBox.Name = "AtivoCheckBox";
+            AtivoCheckBox.RightToLeft = RightToLeft.Yes;
+            AtivoCheckBox.Size = new Size(15, 14);
+            AtivoCheckBox.TabIndex = 10;
+            AtivoCheckBox.TextAlign = ContentAlignment.MiddleRight;
+            AtivoCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // AtivoLabel
+            // 
+            AtivoLabel.AutoSize = true;
+            AtivoLabel.Location = new Point(28, 140);
+            AtivoLabel.Name = "AtivoLabel";
+            AtivoLabel.Size = new Size(38, 15);
+            AtivoLabel.TabIndex = 9;
+            AtivoLabel.Text = "Ativo:";
             // 
             // FormUsuario
             // 
-            this.AcceptButton = this.btnSalvar;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.btnCancelar;
-            this.ClientSize = new System.Drawing.Size(400, 260);
-            this.Controls.Add(this.lblTitulo);
-            this.Controls.Add(this.lblNome);
-            this.Controls.Add(this.txtNome);
-            this.Controls.Add(this.lblLogin);
-            this.Controls.Add(this.txtLogin);
-            this.Controls.Add(this.lblSenha);
-            this.Controls.Add(this.txtSenha);
-            this.Controls.Add(this.btnSalvar);
-            this.Controls.Add(this.btnCancelar);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Name = "FormUsuario";
-            this.Text = "Cadastro de Usuário";
-            this.Load += new System.EventHandler(this.FormUsuario_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AcceptButton = btnSalvar;
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            CancelButton = btnCancelar;
+            ClientSize = new Size(322, 199);
+            Controls.Add(AtivoCheckBox);
+            Controls.Add(AtivoLabel);
+            Controls.Add(lblTitulo);
+            Controls.Add(lblNome);
+            Controls.Add(txtNome);
+            Controls.Add(lblLogin);
+            Controls.Add(txtLogin);
+            Controls.Add(lblSenha);
+            Controls.Add(txtSenha);
+            Controls.Add(btnSalvar);
+            Controls.Add(btnCancelar);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            Margin = new Padding(3, 2, 3, 2);
+            MaximizeBox = false;
+            Name = "FormUsuario";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Cadastro de Usuário";
+            Load += FormUsuario_Load;
+            ((System.ComponentModel.ISupportInitialize)errorProvider).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
-        private System.Windows.Forms.Label lblTitulo;
-        private System.Windows.Forms.Label lblNome;
-        private System.Windows.Forms.Label lblLogin;
-        private System.Windows.Forms.Label lblSenha;
-        private System.Windows.Forms.TextBox txtNome;
-        private System.Windows.Forms.TextBox txtLogin;
-        private System.Windows.Forms.TextBox txtSenha;
-        private System.Windows.Forms.Button btnSalvar;
-        private System.Windows.Forms.Button btnCancelar;
+        private Label lblTitulo;
+        private Label lblNome;
+        private Label lblLogin;
+        private Label lblSenha;
+        private TextBox txtNome;
+        private TextBox txtLogin;
+        private TextBox txtSenha;
+        private Button btnSalvar;
+        private Button btnCancelar;
+        private CheckBox AtivoCheckBox;
+        private Label AtivoLabel;
     }
 }

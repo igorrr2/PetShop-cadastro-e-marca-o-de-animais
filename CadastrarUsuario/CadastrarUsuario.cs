@@ -44,7 +44,8 @@ namespace CadastrarUsuario
                 {
                     u.Nome,
                     u.Login,
-                    UsuarioLogado = u.Token != Guid.Empty.ToString() ? "Sim" : "Não"
+                    UsuarioLogado = u.Token != Guid.Empty.ToString() ? "Sim" : "Não",
+                    Ativo = u.Ativo ? "Sim" : "Não"
                 }).ToList();
 
             if (dgvUsuarios.Columns["UsuarioLogado"] != null)

@@ -18,7 +18,6 @@ namespace CadastrarUsuario
     public partial class FormUsuario : Form
     {
         private readonly Usuario usuarioExistente;
-        private readonly string apiBaseUrl = "https://localhost:5001/api/Usuario";
 
         public FormUsuario(Usuario usuario = null)
         {
@@ -32,42 +31,45 @@ namespace CadastrarUsuario
             {
                 txtNome.Text = usuarioExistente.Nome;
                 txtLogin.Text = usuarioExistente.Login;
-                
+                AtivoCheckBox.Checked = usuarioExistente.Ativo;
                 lblTitulo.Text = "Editar Usuário";
             }
             else
             {
                 lblTitulo.Text = "Cadastrar Novo Usuário";
             }
-            
+
             bool mostrarSenha = usuarioExistente == null;
             lblSenha.Visible = txtSenha.Visible = mostrarSenha;
 
             if (!mostrarSenha)
-            {   
-                int novoTop = txtSenha.Top;
-                btnSalvar.Top = novoTop;
-                btnCancelar.Top = novoTop;
-                this.Height = this.Height - txtSenha.Height - lblSenha.Height;
+            {
+                int novoTopAtivo = txtSenha.Top + 7;
+                int novoTopSalvarCancelar = AtivoCheckBox.Top;
+                AtivoCheckBox.Top = AtivoLabel.Top = novoTopAtivo;
+                btnSalvar.Top = btnCancelar.Top= novoTopSalvarCancelar;
+                this.Height = this.Height - txtSenha.Height;
             }
         }
 
-        public static CriarUsuarioSolicitacao MontarSolicitacaoCadastrarUsuario(string senha, string NomeUsuario, string login)
+        public static CriarUsuarioSolicitacao MontarSolicitacaoCadastrarUsuario(string senha, string NomeUsuario, string login, bool ativo)
         {
             CriarUsuarioSolicitacao solicitacao = new CriarUsuarioSolicitacao();
             solicitacao.Senha = senha;
             solicitacao.login = login;
             solicitacao.NomeUsuario = NomeUsuario;
+            solicitacao.Ativo = ativo;
 
             return solicitacao;
         }
 
-        public static AtualizarUsuarioSolicitacao MontarSolicitacaoAtualizarUsuario(string idUsuarioAtualizar, string NomeUsuario, string login)
+        public static AtualizarUsuarioSolicitacao MontarSolicitacaoAtualizarUsuario(string idUsuarioAtualizar, string NomeUsuario, string login, bool ativo)
         {
             AtualizarUsuarioSolicitacao solicitacao = new AtualizarUsuarioSolicitacao();
             solicitacao.IdUsuarioAtualizar = idUsuarioAtualizar;
             solicitacao.login = login;
             solicitacao.NomeUsuario = NomeUsuario;
+            solicitacao.Ativo = ativo;
             solicitacao.Senha = solicitacao.ConfirmacaoSenha = string.Empty;
             return solicitacao;
         }
@@ -125,7 +127,7 @@ namespace CadastrarUsuario
                         {
                             try
                             {
-                                CriarUsuarioSolicitacao solicitacao = MontarSolicitacaoCadastrarUsuario(txtSenha.Text, txtNome.Text, txtLogin.Text);
+                                CriarUsuarioSolicitacao solicitacao = MontarSolicitacaoCadastrarUsuario(txtSenha.Text, txtNome.Text, txtLogin.Text, AtivoCheckBox.Checked);
                                 var client = new Client();
                                 (mensagem, resposta) = await client.CadastrarUsuarioAsync(solicitacao);
                             }
@@ -183,7 +185,7 @@ namespace CadastrarUsuario
                         {
                             try
                             {
-                                AtualizarUsuarioSolicitacao solicitacao = MontarSolicitacaoAtualizarUsuario(usuarioExistente.Id, txtNome.Text, txtLogin.Text);
+                                AtualizarUsuarioSolicitacao solicitacao = MontarSolicitacaoAtualizarUsuario(usuarioExistente.Id, txtNome.Text, txtLogin.Text, AtivoCheckBox.Checked);
                                 var client = new Client();
                                 (mensagem, resposta) = await client.AtualizarUsuarioAsync(solicitacao);
                             }
